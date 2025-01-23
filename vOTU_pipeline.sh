@@ -250,6 +250,7 @@ while read contig; do
   awk -v contig="$contig" '/^>/{p = ($0 ~ contig)} p' virus_3kb.fasta
 done < contigs_to_keep.txt > filtered_0.8_virus_3kb.fna
 
+
 ###################################################
 # 6. profilling #
 ###################################################
@@ -293,7 +294,7 @@ do
 
   # Generate CoverM stats files
   echo -e 'vOTU\t'"${file}"'' > "${output_coverm_stats}"
-  cut -f2,11 "${output_coverm}" | sed '1d' >> "${output_coverm_stats}" #workes wuhu!
+  cut -f2,11 "${output_coverm}" | sed '1d' >> "${output_coverm_stats}" 
 
   # Generate stats files
   echo -e 'vOTU\t'"${file}"'' > "${output_stats}"
@@ -328,7 +329,7 @@ checkv end_to_end $in/filtered_0.8_virus_3kb.fna $out/ -t 16 -d $db
 
 #!/bin/sh
 # -c 8
-# --mem=60gb                       # cores
+# --mem=60gb                    
 
 source ~/.bashrc
 mamba activate iphop_env
@@ -384,5 +385,3 @@ rm -rf $temp_dir
 
 echo "vOTU table created at $out/rpkm_0.1_abundance_table.csv"
 
-
-### downstream statistics and visualisation done using R
