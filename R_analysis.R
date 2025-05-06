@@ -1,58 +1,52 @@
----
-title: "crappyfish_2.0_clean"
-author: "Caroline Winther-Have"
-date: "2024-01-17"
-output: html_document
----
-
 # Load libraries:
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse);packageVersion("tidyverse")
 library(ggplot2);packageVersion("ggplot2")
-library(ape);packageVersion("ape")
 library(phyloseq);packageVersion("phyloseq") 
-library(survival);packageVersion("survival")
-library(Hmisc);packageVersion("Hmisc") 
 library(RColorBrewer);packageVersion("RColorBrewer") 
 library(ComplexHeatmap);packageVersion("ComplexHeatmap") 
 library(ggpubr);packageVersion("ggpubr") 
-library(ggrepel);packageVersion("ggrepel") 
 library(readxl);packageVersion("readxl") 
 library(ADImpute);packageVersion("ADImpute") 
-library(DESeq2);packageVersion("DESeq2") 
-library(corrplot);packageVersion("corrplot")
-library(corrr);packageVersion("corrr") 
 library(patchwork);packageVersion("patchwork")
 library(cowplot);packageVersion("cowplot") 
-library(Matrix);packageVersion("Matrix") 
-library(psych);packageVersion("psych")
-library(forcats);packageVersion("forcats") 
 library(rstatix);packageVersion("rstatix")
-library(vegan);packageVersion("vegan") 
-library(ggsignif);packageVersion("ggsignif")
 library(svglite);packageVersion("svglite")
 library(circlize);packageVersion("circlize")
 library(reshape2);packageVersion("reshape2")
-library(MASS);packageVersion("MASS")
-library(ggridges);packageVersion("ggridges")
-library(gridExtra);packageVersion("gridExtra")
-library(reshape)packageVersion("reshape")
+library(hilldiv);packageVersion("hilldiv")
 ```
 
-### Load virome data
-```{r}
+```{r Load virome data}
 #metadata
-metadata_cf <- read.csv("/metadata_cf.csv", sep = ";")  %>% filter(!Sample_name %in% c("S02", "H04")) #failed samples removed - only 38 used downstream
+metadata_cf <- read.csv("~/Desktop/01_CrappyFish_manuscript/data/virome_data/metadata_cf.csv", sep = ";")  %>% filter(!Sample_name %in% c("S02", "H04")) #failed samples removed - only 38 used downstream
 rownames(metadata_cf) <- metadata_cf$Sample_name %>% as.matrix()
 
 # virus df
-virus_tax_cf <-  read_excel("/tax_vOTU_overview.xlsx", sheet = "Sheet1") 
-virus_abun_cf <- read.csv("/rpkm_0.02_abundance_table.csv", sep = ";") 
-virus_length_cf <- read.csv("/vOTU_files/vOTU_length.tsv", sep = "\t")
+virus_tax_cf <-  read_excel("/Users/zts270/Desktop/01_CrappyFish_manuscript/data/move_to_dori/vOTU_files/tax_vOTU_overview.xlsx", sheet = "Sheet1") 
+virus_abun_cf <- read.csv("/Users/zts270/Desktop/01_CrappyFish_manuscript/data/move_to_dori/rpkm_0.02_abundance_table.csv", sep = ";") 
+virus_length_cf <- read.csv("/Users/zts270/Desktop/01_CrappyFish_manuscript/data/move_to_dori/vOTU_files/vOTU_length.tsv", sep = "\t")
 
-# Calculate average length weighted by abundance
+```
+
+
+```{r Load bacterial 16S rRNA data}
+bacteria_16S <- read.csv("~/Desktop/01_CrappyFish_manuscript/data/16S_data/Bozzi_OTUs.csv", sep = ";") %>% as.data.frame() 
+bac.tax <- read.csv("~/Desktop/01_CrappyFish_manuscript/data/16S_data/Bozzi_bacteria_taxonomy.csv")
+bac.meta <- read.csv("~/Desktop/01_CrappyFish_manuscript/data/16S_data/Bozzi_bacteria_metadata.csv", sep = ";") 
+
+virome.bac <- read.csv("/Users/zts270/Desktop/01_CrappyFish_manuscript/data/16S_data/rpkm_0.02_abundance_table_bacteria.csv", sep = ";") # virome data but only in samples overlapping with samples from which 16S has been generated
+
+bacteria_MAGs <- read.csv("/Users/zts270/Desktop/01_CrappyFish_manuscript/MAGs/CF_mags_no2/MAG_cov_aliMyco.csv", sep = ",")  
+
+otus_in_otu_table <- colnames(bacteria_16S)[-1]
+
+# Filter taxonomy table
+bac.tax <- bac.tax[bac.tax$Column1 %in% otus_in_otu_table, ]
+```
+
+```{r average weighted mean length by abundance}
 average_abun <- virus_abun_cf
 colnames(average_abun)[colnames(average_abun) == "vOTU"] <- "seq_name"
 
@@ -60,28 +54,11 @@ average_abun$total_abundance <- rowSums(average_abun[, -1])
 
 average_length <- mean(virus_length_cf$length)
 
-# Merge the data frames
 merged_df <- merge(virus_length_cf, average_abun, by = "seq_name")
 
-# Calculate weighted mean
 weighted_avg_length <- weighted.mean(merged_df$length, merged_df$total_abundance)
+weighted_avg_length
 
-coverage <- rowSums(average_abun > 0) / ncol(average_abun)
-coverage_df <- data.frame(vOTU = rownames(average_abun), Coverage = coverage)
-```
-
-### Load bacterial 16S rRNA data
-```{r}
-bacteria <- read.csv("/Bozzi_OTUs.csv", sep = ";") %>% as.data.frame() 
-  
-virome.bac <- read.csv("/rpkm_0.02_abundance_table_bacteria.csv", sep = ";") # virome data but only in samples overlapping with samples from which 16S has been generated
-bac.tax <- read.csv("/Bozzi_bacteria_taxonomy.csv")
-bac.meta <- read.csv("/Bozzi_bacteria_metadata.csv", sep = ";") 
-
-otus_in_otu_table <- colnames(bacteria)[-1]
-
-# Filter taxonomy table
-bac.tax <- bac.tax[bac.tax$Column1 %in% otus_in_otu_table, ]
 ```
 
 ### Relative abudance plot of 16S rRNA data
@@ -90,14 +67,20 @@ Myco <- bac.tax %>%
   select(Column1,Family) %>%
   filter(Family == "Mycoplasmataceae") %>%
   .$Column1
-Samples <- bacteria$SampleID
+Samples <- bacteria_16S$SampleID
+
+
+vib <- bac.tax %>%
+ select(Column1,Genus) %>%
+ filter(Genus == "Vibrio") %>%
+ .$Column1
 
 Ali <- bac.tax %>%
  select(Column1,Genus) %>%
  filter(Genus == "Aliivibrio") %>%
  .$Column1
 
-Myco.df <- bacteria %>%
+Myco.df <- bacteria_16S %>%
   column_to_rownames(var = "SampleID") %>%
   t() %>%
   hilldiv::tss() %>%
@@ -109,7 +92,20 @@ Myco.df <- bacteria %>%
   group_by(SampleID) %>%
   summarise(Mycoplasma = sum(value))
 
-Ali.df <- bacteria %>%
+vib.df <- bacteria_16S %>%
+  column_to_rownames(var = "SampleID") %>%
+  t() %>%
+  hilldiv::tss() %>%
+  t() %>%
+  as_tibble() %>%
+  select(all_of(vib[1:1])) %>%
+  mutate(SampleID = Samples, .before = 1) %>%
+  reshape2::melt() %>%
+  group_by(SampleID) %>%
+  summarise(Vibrio = sum(value))
+
+
+Ali.df <- bacteria_16S %>%
   column_to_rownames(var = "SampleID") %>%
   t() %>%
   hilldiv::tss() %>%
@@ -121,7 +117,7 @@ Ali.df <- bacteria %>%
   group_by(SampleID) %>%
   summarise(Aliivibrio = sum(value))
 
-all_OTUs <- bacteria %>%
+all_OTUs <- bacteria_16S %>%
   column_to_rownames(var = "SampleID") %>%
   t() %>%
   hilldiv::tss() %>%
@@ -132,10 +128,12 @@ all_OTUs <- bacteria %>%
   group_by(SampleID) %>%
   summarise(Total = sum(value))
 
+# Calculate the "Other" category
 combined_df <- all_OTUs %>%
   left_join(Myco.df, by = "SampleID") %>%
   left_join(Ali.df, by = "SampleID") %>%
-  mutate(Other = Total - Mycoplasma - Aliivibrio) %>%
+  left_join(vib.df, by = "SampleID") %>%
+  mutate(Other = Total - Mycoplasma - Aliivibrio - Vibrio) %>%
   select(-Total) %>%
   arrange(desc(Ali.df$Aliivibrio))
 
@@ -143,68 +141,192 @@ combined_df <- all_OTUs %>%
 combined_df <- combined_df %>%
   gather(key = "Genus", value = "Value", -SampleID)  
 
+# Convert SampleID to a factor and specify the levels
 combined_df$SampleID <- factor(combined_df$SampleID, levels = unique(combined_df$SampleID))
 
-# plot
+
+# Create the plot
 plot_16S <-ggplot(combined_df, aes(x = SampleID, y = Value, fill = Genus)) +
   geom_bar(stat = "identity") +
   theme_minimal() +
-  theme(axis.text.x = element_text(size = 10, angle = 0, hjust = 0.3), 
+  theme(axis.text.x = element_text(size = 10, angle = 0, hjust = 0.3), #vjust = 0.5, hjust = 1),
         legend.text = element_text(size = 10),
         plot.title = element_text(size = 14),
         axis.title.x = element_text(size = 12),
         axis.title.y = element_text(size = 12),
         legend.title = element_text(size = 12)) +
   labs(y = "Relative Abundance", title = "16S rRNA microbiota profile", x = "Samples") +
-  scale_fill_manual(values = c("goldenrod1", "salmon2", "tomato4")) + 
+  scale_fill_manual(values = c("goldenrod1", "salmon2", "tomato4", "goldenrod3")) + #"blue"
   geom_tile() +
   theme(axis.line = element_blank(),
         panel.grid = element_blank())
 
 plot_16S
+
+# svglite("plot_16S.svg", width = 18, height = 12)
+# plot(plot_16S)
+# dev.off()
+```
+
+```{r MAG vs 16S relative abundance profile}
+Myco <- bac.tax %>%
+  select(Column1, Family) %>%
+  filter(Family == "Mycoplasmataceae") %>%
+  pull(Column1)
+
+vib <- bac.tax %>%
+  select(Column1, Genus) %>%
+  filter(Genus == "Vibrio") %>%
+  pull(Column1)
+
+Ali <- bac.tax %>%
+  select(Column1, Genus) %>%
+  filter(Genus == "Aliivibrio") %>%
+  pull(Column1)
+
+Samples_16S <- bacteria_16S$SampleID
+Samples_MAGs <- bacteria_MAGs$SampleID
+
+# extract genus function
+extract_genus_df <- function(bacteria_df, genus_list, genus_name, sample_ids) {
+  bacteria_df %>%
+    column_to_rownames("SampleID") %>%
+    t() %>%
+    hilldiv::tss() %>%
+    t() %>%
+    as_tibble() %>%
+    select(all_of(genus_list)) %>%
+    mutate(SampleID = sample_ids, .before = 1) %>%
+    melt() %>%
+    group_by(SampleID) %>%
+    summarise("{genus_name}" := sum(value))
+}
+
+# 16S setup
+Myco.df.16S <- extract_genus_df(bacteria_16S, Myco[1:8], "Mycoplasma", Samples_16S)
+Ali.df.16S  <- extract_genus_df(bacteria_16S, Ali[1:5], "Aliivibrio", Samples_16S)
+Vib.df.16S  <- extract_genus_df(bacteria_16S, vib[1:1], "Vibrio", Samples_16S)
+
+all_OTUs.16S <- bacteria_16S %>%
+  column_to_rownames("SampleID") %>%
+  t() %>%
+  hilldiv::tss() %>%
+  t() %>%
+  as_tibble() %>%
+  mutate(SampleID = Samples_16S, .before = 1) %>%
+  melt() %>%
+  group_by(SampleID) %>%
+  summarise(Total = sum(value))
+
+combined_df_16S <- all_OTUs.16S %>%
+  left_join(Myco.df.16S, by = "SampleID") %>%
+  left_join(Ali.df.16S, by = "SampleID") %>%
+  left_join(Vib.df.16S, by = "SampleID") %>%
+  mutate(Other = Total - Mycoplasma - Aliivibrio - Vibrio) %>%
+  select(-Total) %>%
+  gather(key = "Genus", value = "Value", -SampleID)
+
+# MAG setup
+Myco.df.MAGs <- extract_genus_df(bacteria_MAGs, Myco[1:1], "Mycoplasma", Samples_MAGs)
+Ali.df.MAGs  <- extract_genus_df(bacteria_MAGs, Ali[1:1], "Aliivibrio", Samples_MAGs)
+
+all_OTUs.MAGs <- bacteria_MAGs %>%
+  column_to_rownames("SampleID") %>%
+  t() %>%
+  hilldiv::tss() %>%
+  t() %>%
+  as_tibble() %>%
+  mutate(SampleID = Samples_MAGs, .before = 1) %>%
+  melt() %>%
+  group_by(SampleID) %>%
+  summarise(Total = sum(value))
+
+combined_df_MAGs <- all_OTUs.MAGs %>%
+  left_join(Myco.df.MAGs, by = "SampleID") %>%
+  left_join(Ali.df.MAGs, by = "SampleID") %>%
+  mutate(Other = Total - Mycoplasma - Aliivibrio) %>%
+  select(-Total) %>%
+  gather(key = "Genus", value = "Value", -SampleID)
+
+ordered_from_16S <- combined_df_16S %>%
+  filter(Genus == "Aliivibrio") %>%
+  arrange(desc(Value)) %>%
+  pull(SampleID) %>%
+  unique()
+
+mag_only_samples <- setdiff(combined_df_MAGs$SampleID, combined_df_16S$SampleID)
+
+sample_order <- c(ordered_from_16S, mag_only_samples)
+
+all_samples <- union(combined_df_16S$SampleID, combined_df_MAGs$SampleID)
+all_genera_16S <- unique(combined_df_16S$Genus)
+all_genera_MAGs <- unique(combined_df_MAGs$Genus)
+
+full_grid_16S <- expand.grid(SampleID = all_samples, Genus = all_genera_16S)
+full_grid_MAGs <- expand.grid(SampleID = all_samples, Genus = all_genera_MAGs)
+
+combined_df_16S <- full_grid_16S %>%
+  left_join(combined_df_16S, by = c("SampleID", "Genus")) %>%
+  mutate(Value = replace_na(Value, 0))
+
+combined_df_MAGs <- full_grid_MAGs %>%
+  left_join(combined_df_MAGs, by = c("SampleID", "Genus")) %>%
+  mutate(Value = replace_na(Value, 0))
+
+combined_df_16S$SampleID <- factor(combined_df_16S$SampleID, levels = sample_order)
+combined_df_MAGs$SampleID <- factor(combined_df_MAGs$SampleID, levels = sample_order)
+
+# plot
+plot_16S <- ggplot(combined_df_16S, aes(x = SampleID, y = Value, fill = Genus)) +
+  geom_bar(stat = "identity") +
+  theme_minimal() +
+  scale_y_continuous(limits = c(0, 1)) +
+  theme(axis.text.x = element_text(size = 8, angle = 90, hjust = 1)) +
+  labs(title = "16S rRNA microbiota profile", y = "Relative Abundance", x = NULL) +
+  scale_fill_manual(values = c("goldenrod1", "salmon2", "tomato4", "goldenrod3"))
+
+plot_MAGs <- ggplot(combined_df_MAGs, aes(x = SampleID, y = Value, fill = Genus)) +
+  geom_bar(stat = "identity") +
+  theme_minimal() +
+  scale_y_continuous(limits = c(0, 1)) +
+  theme(axis.text.x = element_text(size = 8, angle = 90, hjust = 1)) +
+  labs(title = "MAGs microbiota profile", y = "Relative Abundance", x = "Samples") +
+  scale_fill_manual(values = c("darkgoldenrod1", "salmon2", "tomato4"))
+
+# Combine plots vertically
+mag16plot <- plot_grid(plot_16S, plot_MAGs, ncol = 1, align = "v")
+mag16plot
+
+# svglite("Mmag16plot.svg", width = 18, height = 12)
+# plot(mag16plot)
+# dev.off()
+
+
 ```
 
 ### Phyloseq object generation:
-```{r}
+```{r phyloseq object setup}
 # Subset vOTU virome table based on vOTU IDs in size_virome and set vOTU as row names
 virus_abun_cf <- virus_abun_cf %>%
   filter(vOTU %in% virus_length_cf$seq_name) %>%
  column_to_rownames(var = "vOTU") 
 
-# Normalize TPM for virome data using contig length data
-colnames(virus_length_cf) <- c("hgnc_symbol","transcript_length")
-vContig.tmp <- NormalizeTPM(virus_abun_cf, tr_length = virus_length_cf, scale = 1e+06) 
-
-# Extract vOTU IDs 
-virome_vcontig <- rownames(vContig.tmp)
-virus_abun_c_uhmf <- rownames(virus_abun_cf)
 virus_abun_cf[is.na(virus_abun_cf)] <- 0
 virus_abun_cf <- virus_abun_cf %>% as_tibble()
 
-vContig.tmp[is.na(vContig.tmp)] <- 0
 
-vContig.tmp <- vContig.tmp %>% as_tibble() 
-
-# physeq object
-physeq.tmp <- phyloseq(otu_table(vContig.tmp, taxa_are_rows = TRUE),
-               tax_table(as.matrix(virus_tax_cf)),
-               sample_data(metadata_cf))
-
-#Non-normalised phyloseq object
-physeq.nn <- phyloseq(otu_table((virus_abun_cf), taxa_are_rows = TRUE),
+# phyloseq object
+physeq <- phyloseq(otu_table((virus_abun_cf), taxa_are_rows = TRUE),
                              tax_table(as.matrix(virus_tax_cf)),
                              sample_data(metadata_cf))
 
-subset_alii <- subset_taxa(physeq.nn, Host_family == "Vibrionaceae")
+subset_alii <- subset_taxa(physeq, Host_family == "Vibrionaceae")
 
-# Set up data for heatmap plots
-gpt <- subset_samples(physeq.tmp, Myco90 %in% c("Mycoplasma","Aliivibrio sp.", "unknown"))
+```
 
-# Transformation to the OTU table 
-otu_table(gpt) <- otu_table(gpt) + 1
-
+```{r heatmaps vOTUs}
 # Subset the samples based on the microbiota column
-gpt <- subset_samples(physeq.nn, Category %in% c("Mycoplasma sp.", "Aliivibrio sp.", "Sick fish, no 16S"))
+gpt <- subset_samples(physeq, Category %in% c("Mycoplasma sp.", "Aliivibrio sp.", "Sick fish, no 16S"))
 
 otu_table(gpt) <- otu_table(gpt) + 1
 
@@ -238,9 +360,10 @@ p_heatmap <- cowplot::plot_grid(
   ncol = 1, 
   rel_heights = c(1, 0.05) )
 
-p_heatmap
+plot(p_heatmap)
 
-# vOTUs that had a Vibrionaceae host predicted by iPHoP
+
+# Heatmap 2 with only vOTUs with Vibrionaceae host predicted by iphop 
 gpt <- subset_samples(subset_alii, Category %in% c("Mycoplasma sp.", "Aliivibrio sp.", "Sick fish, no 16S"))
 
 # Transformation to the OTU table 
@@ -275,16 +398,16 @@ p_heatmap_ali <- cowplot::plot_grid(
   ncol = 1, 
   rel_heights = c(1, 0.05))
 
-p_heatmap_ali
+plot(p_heatmap_ali)
 ```
 
 ### Alpha diversity analysis between the three microbiota groups (Aliivibrio, Mycoplasma or no 16S)
 ```{r}
 # Subset physeq object
-physeq.mycoAlii.nn <- subset_samples(physeq.nn, Category %in% c("Mycoplasma sp.","Aliivibrio sp.", "Sick fish, no 16S"))
+physeq.mycoAlii.nn <- subset_samples(physeq, Category %in% c("Mycoplasma sp.","Aliivibrio sp.", "Sick fish, no 16S"))
 
 #Alpha diversity using Richness, Shannon and Simpson indices
-richness <- estimate_richness(physeq.nn, measures = c("Observed","Shannon", "Simpson"))
+richness <- estimate_richness(physeq, measures = c("Observed","Shannon", "Simpson"))
 md.richness <- metadata_cf[match(rownames(richness),metadata_cf$Sample_name),]
 richness <- cbind(md.richness, richness)
 
@@ -370,20 +493,20 @@ diversity_plot <- cowplot::plot_grid(combined_plot,
     ncol = 1, 
     rel_heights = c(0.1, 1))
 
-diversity_plot
+plot(diversity_plot)
 ```
 
 
 ### MAG module completion
 ```{r, print=F}
 # Load data 
-module_completion <- read.table(file='/metabolism-module_pathwise_completeness-MATRIX.txt', header = TRUE, sep = "\t")
+module_completion <- read.table(file='/Users/zts270/Desktop/01_CrappyFish_manuscript/MAGs/CF_mags_no2/metabolic_independence/metabolism-module_pathwise_completeness-MATRIX.txt', header = TRUE, sep = "\t")
 
 # Load metabolic completion values across genomes
-module_info <- read.csv("/modules_info.txt", sep = "\t")
+module_info <- read.csv("~/Desktop/01_CrappyFish_manuscript/MAGs/CF_mags_no2/metabolic_independence/modules_info.txt", sep = "\t")
 
 # Load external genomes (pangenomes)
-external_genomes <- read.table(file='/external-genomes.txt', header = TRUE, sep = "\t")
+external_genomes <- read.table(file='/Users/zts270/Desktop/01_CrappyFish_manuscript/MAGs/CF_mags_no2/metabolic_independence/external-genomes.txt', header = TRUE, sep = "\t")
 
 external_genomes <- external_genomes %>%
   dplyr::mutate(Group = c(rep("Mycoplasma", 21), rep("Aliivibrio", 11)))
@@ -487,7 +610,8 @@ MoI_plot <- MoI %>%
         axis.text.x = element_text(size=12))
 
 
-(plot_all_genomes + plot_CF_genomes) | MoI_plot + plot_layout(guides = "collect")
+((plot_all_genomes + plot_CF_genomes) | MoI_plot + plot_layout(guides = "collect"))
+
 ```
 
 ### Plot vOTU annotations
@@ -584,3 +708,5 @@ anno_heatmap <- Heatmap(
 
 anno_heatmap
 ```
+
+
