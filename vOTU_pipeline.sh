@@ -104,7 +104,7 @@ spades.py --meta --only-assembler -k 25,33,55,77,95,101,127 \
 -o $out/${i}_contigs
 
 ###############################################
-# 4. Virus identification #
+# 4. Virus prediction on single and coassembly #
 ###############################################
 
 #!/bin/sh
@@ -162,7 +162,6 @@ import os
 import subprocess
 import pandas as pd
 
-# Flag setup
 parser = argparse.ArgumentParser(description='bl4stn - 1st pyth0n')
 parser.add_argument('-i', '--input', help='Path to fasta file.', required=True)
 parser.add_argument('-wd', help='Path to working_directory.', required=True)
@@ -175,42 +174,33 @@ parser.add_argument('--min_qcov', type=int, default=0, help='Minimum coverage of
 
 args = parser.parse_args()
 
-# Create a directory for the output
 set_folder = os.path.join(args.wd, args.output)
 os.makedirs(set_folder, exist_ok=True)
 
-# Make path to anicalc.py and aniclust.py
 anicalc_path = os.path.join(args.ani, 'anicalc.py')
 aniclust_path = os.path.join(args.ani, 'aniclust.py')
 
-# Run makeblastdb fasta file
 blastdb_output = os.path.join(set_folder, 'virus_contigs_blast_DB')
 subprocess.run(['makeblastdb', '-in', args.input, '-dbtype', 'nucl', '-out', blastdb_output])
 
-# Run blastn on the concatenated FASTA file
 blastn_output = os.path.join(set_folder, 'viral_contigs_ready_for_cluster.tsv')
 subprocess.run(['blastn', '-query', args.input, '-db', blastdb_output, '-outfmt', '6 std qlen slen', '-max_target_seqs', '10000', '-out', blastn_output, '-num_threads', str(args.threads)])
 
-# Run anicalc.py on the blastn output
 ani_output = os.path.join(set_folder, 'viral_contig_ANI_calculation.tsv')
 subprocess.run(['python', anicalc_path, '-i', blastn_output, '-o', ani_output])
 
-# Run aniclust.py on the anicalc.py output
 cluster_output = os.path.join(set_folder, 'viral_contig_ANI_clusters.tsv')
 subprocess.run(['python', aniclust_path, '--fna', args.input, '--ani', ani_output, '--out', cluster_output, '--min_ani', str(args.min_ani), '--min_tcov', str(args.min_tcov), '--min_qcov', str(args.min_qcov)])
 
-# Add column names to the output file
 df = pd.read_csv(cluster_output, sep='\t', header=None)
 df.columns = ['Representative_Sequence', 'Sequences']
 contig_ids_to_keep = set(df['Representative_Sequence'].tolist())
 df.to_csv(cluster_output, sep='\t', index=False)
 
-# Find the directory containing the viruses and proviruses fasta files for this sample
 fasta_lines = []
 with open(args.input, 'r') as f:
     fasta_lines = f.readlines()
 
-# Filter the concatenated file
 representative_fasta_file = os.path.join(set_folder, 'clust_virus_contigs.fna')
 with open(representative_fasta_file, 'w') as f:
     for line in fasta_lines:
@@ -228,34 +218,26 @@ with open(representative_fasta_file, 'w') as f:
 
 
 ###################################################
-# 5.2 rerun geNomad to get the phylogeny, length etc. #
+# 5.2 filter out contigs larger than 3kb which have a geNomad fdr score of min. 0.8 #
 ###################################################
-
-### filter out contigs larger than 3kb which have a geNomad fdr score of min. 0.8
 
 seqtk seq <your_input.fasta> | awk 'BEGIN {RS=">"; ORS=""} length($0) > 3000 {print ">"$0}' > virus_3kb.fasta
 
-#
-vim filter_script.sh
+# loop script:
 #!/bin/bash
 
-# Define the score threshold
 threshold=0.8
 
-# Create a list of contigs with score > threshold
 awk -v threshold="$threshold" 'BEGIN {FS="\t"} $7 > threshold {print $1}' virus_3kb.tsv > contigs_to_keep.txt
 
-# Filter the .fna file
 while read contig; do
   awk -v contig="$contig" '/^>/{p = ($0 ~ contig)} p' virus_3kb.fasta
 done < contigs_to_keep.txt > filtered_0.8_virus_3kb.fna
 
 
 ###################################################
-# 6. profilling #
+# 6. profilling / mapping #
 ###################################################
-
-vim profilling_cf.sh
 
 #!/bin/sh                       
 # -c 5
@@ -264,7 +246,6 @@ vim profilling_cf.sh
 source ~/.bashrc
 mamba activate bowtie2_samtools_coverm
 
-# Define variables
 READS="/path/"
 vOTUs="/path/"
 OUT="/path/"
@@ -280,23 +261,17 @@ do
   output_coverm="${OUT}/${file}_CoverM.tsv"
   output_stats="${OUT}/${file}.stats"
 
-  # Run Bowtie2
   bowtie2 -x $vOTUs/dbname -1 $READS/"$file"_v_noEUK_1.fq.gz -2 $READS/"$file"_v_noEUK_2.fq.gz -p $SLURM_CPUS_PER_TASK | samtools view -bS > "${output_sam}"
 
-  # Convert SAM to BAM
   samtools view -S -b "${output_sam}" -o "${output_bam}" -@ $SLURM_CPUS_PER_TASK
 
-  # Sort BAM files
   samtools sort "${output_bam}" -o "${sorted_bam}" -@ $SLURM_CPUS_PER_TASK
 
-  # Run CoverM
   coverm contig -b "${sorted_bam}" -m mean trimmed_mean covered_bases covered_fraction variance length count reads_per_base rpkm tpm -o "${output_coverm}" --output-format sparse
 
-  # Generate CoverM stats files
   echo -e 'vOTU\t'"${file}"'' > "${output_coverm_stats}"
   cut -f2,11 "${output_coverm}" | sed '1d' >> "${output_coverm_stats}" 
 
-  # Generate stats files
   echo -e 'vOTU\t'"${file}"'' > "${output_stats}"
   samtools index -b "${sorted_bam}"
   samtools idxstats "${sorted_bam}" | cut -f1,3 | sed '/*/d' >> "${output_stats}"
@@ -306,8 +281,6 @@ done
 ###################################################
 # 7. checkV #
 ###################################################
-
-vim checkv.sh
 
 #!/bin/sh
 # -c 16
@@ -345,42 +318,32 @@ iphop predict --fa_file $in/filtered_0.8_virus_3kb.fna --db_dir $db --out_dir $o
 # 9.vOTU table and normalisation #
 ###################################################
 
-vim vOTU_table.sh #worked!
-
 #!/bin/bash
 # -c 1
 # --mem=1gb
 
-# setup path to directories containing files
 in="/path/"
 out="/path/vOTU_table"
 
 sample_list=$(cat $in/sample_list)
 
-# Temporary directory to store intermediate files
 temp_dir="$out/temp"
 mkdir -p $temp_dir
 
-# Use vOTUs.txt file for the first column with the header vOTU
 cp $in/vOTUs.txt $temp_dir/votus.txt
 
-# Initialize the final vOTU table with the vOTUs (contig names) as the first column
 echo -e "vOTU,$(echo $sample_list | tr ' ' ',')" > $out/rpkm_0.1_abundance_table.csv
 
-# Create a file with contig names to start building the table
 cp $temp_dir/votus.txt $temp_dir/votu_table.csv
 
-# Loop through each sample and extract the relevant RPKM values
 for sample in $sample_list; do
     awk -F'\t' 'NR > 1 {if ($6 >= 0.1) print $11; else print 0}' $in/${sample}_CoverM.tsv > $temp_dir/${sample}_filtered_rpkm.txt
     paste -d',' $temp_dir/votu_table.csv $temp_dir/${sample}_filtered_rpkm.txt > $temp_dir/temp_table.csv
     mv $temp_dir/temp_table.csv $temp_dir/votu_table.csv
 done
 
-# Combine the vOTU names and the vOTU table into the final CSV file
 awk 'BEGIN {FS=OFS=","} {print $0}' $temp_dir/votu_table.csv >> $out/rpkm_0.1_abundance_table.csv
 
-# Cleanup temporary files
 rm -rf $temp_dir
 
 echo "vOTU table created at $out/rpkm_0.1_abundance_table.csv"
