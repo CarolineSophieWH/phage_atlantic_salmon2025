@@ -324,81 +324,59 @@ subset_alii <- subset_taxa(physeq, Host_family == "Vibrionaceae")
 
 ```
 
-```{r heatmaps vOTUs}
-# Subset the samples based on the microbiota column
-gpt <- subset_samples(physeq, Category %in% c("Mycoplasma sp.", "Aliivibrio sp.", "Sick fish, no 16S"))
+```{r}
+gpt_all <- subset_samples(physeq, Category %in% c("Mycoplasma sp.", "Aliivibrio sp.", "Sick fish, no 16S"))
+otu_table(gpt_all) <- otu_table(gpt_all) + 1
+sample_order <- sample_names(gpt_all)[order(sample_data(gpt_all)$Category)]
 
-otu_table(gpt) <- otu_table(gpt) + 1
+gpt1 <- gpt_all
+taxa_names(gpt1) <- tax_table(gpt1)[, "vOTU"]
 
-# Reorder samples based on the 'Sample_name' column
-sample_data <- data.frame(sample_data(gpt))
-sample_order <- sample_data$Sample_name[order(sample_data$Category)]
+p1 <- plot_heatmap(gpt1,
+                   method = "NMDS",
+                   distance = "bray",
+                   sample.label = "Sample_name",
+                   taxa.label = "vOTU")
 
-taxa_names(gpt) <- tax_table(gpt)[, "vOTU"] 
+ord_sample_order <- unique(p1$data$Sample)
 
-# Generate heatmap plot 
-p_heatmap <- plot_heatmap(gpt, method = "NMDS", distance = "bray", sample.label = "Sample_name", taxa.label = "vOTU")
+p1 <- plot_heatmap(gpt1,
+                   method = NULL,
+                   sample.order = ord_sample_order,
+                   sample.label = "Sample_name",
+                   taxa.label = "vOTU") +
+  scale_fill_gradientn(colors = c("white", "dodgerblue2", "lightblue")) +
+  labs(y = "vOTU") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5),
+        axis.title.x = element_blank(),
+        axis.ticks.x = element_blank()) +
+  ggforce::facet_row(~Category, scales = "free_x", space = "free")
 
-# Reorder the samples 
-p_heatmap$data$Sample <- factor(p_heatmap$data$Sample, levels = sample_order)
+ord_sample_order <- as.character(ord_sample_order)
 
-p_heatmap <- plot_heatmap(gpt, method = "NMDS", distance = "bray", sample.label = "Sample_name", taxa.label = "vOTU") +
-  scale_fill_gradientn(colors = c("white", "dodgerblue2", "lightblue")) +  
-  labs(y = "vOTU", x = "Samples") +
-  theme(axis.text.y = element_text(size = 7, colour = "black"), 
-        axis.text.x = element_text(angle = 45),  
-        axis.ticks.x = element_blank(),  
-        panel.spacing = unit(0, "lines"),
-        axis.title.x = element_blank()) +
-  ggforce::facet_row(~Category, scales = "free_x", space = "free") 
-  
-x_title_samples <- ggdraw() + 
-  draw_label("Samples", size = 12, hjust = 0.5)
+gpt2 <- prune_samples(ord_sample_order, gpt2)
 
-p_heatmap <- cowplot::plot_grid(
-  p_heatmap, x_title_samples, 
-  ncol = 1, 
-  rel_heights = c(1, 0.05) )
+p2 <- plot_heatmap(gpt2,
+                   method = NULL,
+                   sample.order = ord_sample_order,
+                   sample.label = "Sample_name",
+                   taxa.label = "vOTU") +
+  scale_fill_gradientn(colors = c("white", "goldenrod1", "orange")) +
+  labs(y = "vOTU") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5),
+        axis.title.x = element_blank(),
+        axis.ticks.x = element_blank()) +
+  ggforce::facet_row(~Category, scales = "free_x", space = "free")
 
-plot(p_heatmap)
+x_title <- ggdraw() + draw_label("Samples", size = 12, hjust = 0.5)
+
+p1 <- cowplot::plot_grid(p1, x_title, ncol = 1, rel_heights = c(1, 0.05))
+p2 <- cowplot::plot_grid(p2, x_title, ncol = 1, rel_heights = c(1, 0.05))
+
+combined <- cowplot::plot_grid(p1, p2, ncol = 1, labels = c("A", "B"), label_size = 14)
+plot(combined)
 
 
-# Heatmap 2 with only vOTUs with Vibrionaceae host predicted by iphop 
-gpt <- subset_samples(subset_alii, Category %in% c("Mycoplasma sp.", "Aliivibrio sp.", "Sick fish, no 16S"))
-
-# Transformation to the OTU table 
-otu_table(gpt) <- otu_table(gpt) + 1
-
-# Reorder the samples based on the 'Sample_name' column
-sample_data <- data.frame(sample_data(gpt))
-sample_order <- sample_data$Sample_name[order(sample_data$Category)]
-
-taxa_names(gpt) <- tax_table(gpt)[, "vOTU"]  
-
-p_heatmap <- plot_heatmap(gpt, method = "NMDS", distance = "bray", sample.label = "Sample_name", taxa.label = "vOTU")
-
-# Reorder the samples 
-p_heatmap$data$Sample <- factor(p_heatmap$data$Sample, levels = sample_order)
-
-p_heatmap_ali <- plot_heatmap(gpt, method = "NMDS", distance = "bray", sample.label = "Sample_name", taxa.label = "vOTU") +
-  scale_fill_gradientn(colors = c("white", "goldenrod1", "orange")) +  
-  labs(y = "vOTU", x = "Samples") +
-  theme(axis.text.y = element_text(size = 7, colour = "black"), 
-        axis.text.x = element_text(angle = 45), 
-        axis.ticks.x = element_blank(), 
-        panel.spacing = unit(0, "lines"),
-        axis.title.x = element_blank()) +
-  ggforce::facet_row(~Category, scales = "free_x", space = "free") 
-  
-x_title_samples <- ggdraw() + 
-  draw_label("Samples", size = 12, hjust = 0.5)
-
-p_heatmap_ali <- cowplot::plot_grid(
-  p_heatmap_ali, x_title_samples, 
-  ncol = 1, 
-  rel_heights = c(1, 0.05))
-
-plot(p_heatmap_ali)
 ```
 
 ### Alpha diversity analysis between the three microbiota groups (Aliivibrio, Mycoplasma or no 16S)
