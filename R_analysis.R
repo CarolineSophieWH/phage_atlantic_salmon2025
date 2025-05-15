@@ -325,14 +325,14 @@ subset_alii <- subset_taxa(physeq, Host_family == "Vibrionaceae")
 ```
 
 ```{r}
-gpt_all <- subset_samples(physeq, Category %in% c("Mycoplasma sp.", "Aliivibrio sp.", "Sick fish, no 16S"))
-otu_table(gpt_all) <- otu_table(gpt_all) + 1
-sample_order <- sample_names(gpt_all)[order(sample_data(gpt_all)$Category)]
+rel_abun_all <- subset_samples(physeq, Category %in% c("Mycoplasma sp.", "Aliivibrio sp.", "Sick fish, no 16S"))
+otu_table(rel_abun_all) <- otu_table(rel_abun_all) + 1
+sample_order <- sample_names(rel_abun_all)[order(sample_data(rel_abun_all)$Category)]
 
-gpt1 <- gpt_all
-taxa_names(gpt1) <- tax_table(gpt1)[, "vOTU"]
+rel_abun1 <- rel_abun_all
+taxa_names(rel_abun1) <- tax_table(rel_abun1)[, "vOTU"]
 
-p1 <- plot_heatmap(gpt1,
+p1 <- plot_heatmap(rel_abun1,
                    method = "NMDS",
                    distance = "bray",
                    sample.label = "Sample_name",
@@ -340,7 +340,7 @@ p1 <- plot_heatmap(gpt1,
 
 ord_sample_order <- unique(p1$data$Sample)
 
-p1 <- plot_heatmap(gpt1,
+p1 <- plot_heatmap(rel_abun1,
                    method = NULL,
                    sample.order = ord_sample_order,
                    sample.label = "Sample_name",
@@ -354,9 +354,9 @@ p1 <- plot_heatmap(gpt1,
 
 ord_sample_order <- as.character(ord_sample_order)
 
-gpt2 <- prune_samples(ord_sample_order, gpt2)
+rel_abun2 <- prune_samples(ord_sample_order, rel_abun2)
 
-p2 <- plot_heatmap(gpt2,
+p2 <- plot_heatmap(rel_abun2,
                    method = NULL,
                    sample.order = ord_sample_order,
                    sample.label = "Sample_name",
