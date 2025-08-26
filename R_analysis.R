@@ -1,5 +1,7 @@
-# Load libraries:
 ```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Load libraries:
 
 library(tidyverse);packageVersion("tidyverse")
 library(ggplot2);packageVersion("ggplot2")
@@ -20,7 +22,7 @@ library(hilldiv);packageVersion("hilldiv")
 
 ```{r Load virome data}
 #metadata
-metadata_cf <- read.csv("~/Desktop/01_CrappyFish_manuscript/data/virome_data/metadata_cf.csv", sep = ";")  %>% filter(!Sample_name %in% c("S02", "H04")) #failed samples removed - only 38 used downstream
+metadata_cf <- read.csv("~/Desktop/01_CrappyFish_manuscript/data/virome_data/metadata.csv", sep = ",")  #%>% filter(!Sample_name %in% c("S02", "H04")) #failed samples removed - only 38 used downstream
 rownames(metadata_cf) <- metadata_cf$Sample_name %>% as.matrix()
 
 # virus df
@@ -32,6 +34,7 @@ virus_length_cf <- read.csv("/Users/zts270/Desktop/01_CrappyFish_manuscript/data
 
 
 ```{r Load bacterial 16S rRNA data}
+# bacteria df
 bacteria_16S <- read.csv("~/Desktop/01_CrappyFish_manuscript/data/16S_data/Bozzi_OTUs.csv", sep = ";") %>% as.data.frame() 
 bac.tax <- read.csv("~/Desktop/01_CrappyFish_manuscript/data/16S_data/Bozzi_bacteria_taxonomy.csv")
 bac.meta <- read.csv("~/Desktop/01_CrappyFish_manuscript/data/16S_data/Bozzi_bacteria_metadata.csv", sep = ";") 
@@ -42,7 +45,6 @@ bacteria_MAGs <- read.csv("/Users/zts270/Desktop/01_CrappyFish_manuscript/MAGs/C
 
 otus_in_otu_table <- colnames(bacteria_16S)[-1]
 
-# Filter taxonomy table
 bac.tax <- bac.tax[bac.tax$Column1 %in% otus_in_otu_table, ]
 ```
 
@@ -128,7 +130,6 @@ all_OTUs <- bacteria_16S %>%
   group_by(SampleID) %>%
   summarise(Total = sum(value))
 
-# Calculate the "Other" category
 combined_df <- all_OTUs %>%
   left_join(Myco.df, by = "SampleID") %>%
   left_join(Ali.df, by = "SampleID") %>%
@@ -137,26 +138,29 @@ combined_df <- all_OTUs %>%
   select(-Total) %>%
   arrange(desc(Ali.df$Aliivibrio))
 
-#Combine all data into one dataframe
 combined_df <- combined_df %>%
   gather(key = "Genus", value = "Value", -SampleID)  
 
-# Convert SampleID to a factor and specify the levels
 combined_df$SampleID <- factor(combined_df$SampleID, levels = unique(combined_df$SampleID))
 
 
-# Create the plot
+library(colorspace)
+
 plot_16S <-ggplot(combined_df, aes(x = SampleID, y = Value, fill = Genus)) +
   geom_bar(stat = "identity") +
   theme_minimal() +
-  theme(axis.text.x = element_text(size = 10, angle = 0, hjust = 0.3), #vjust = 0.5, hjust = 1),
-        legend.text = element_text(size = 10),
+  theme(axis.text.x = element_text(size = 10, angle = 0, hjust = 0.3), 
+        legend.text = element_text(size = 10, angle = ),
         plot.title = element_text(size = 14),
         axis.title.x = element_text(size = 12),
         axis.title.y = element_text(size = 12),
         legend.title = element_text(size = 12)) +
   labs(y = "Relative Abundance", title = "16S rRNA microbiota profile", x = "Samples") +
-  scale_fill_manual(values = c("goldenrod1", "salmon2", "tomato4", "goldenrod3")) + #"blue"
+  scale_fill_manual(values = c(
+    scales::alpha("goldenrod1", 0.9), 
+     scales::alpha("salmon2", 0.9),
+     scales::alpha("tomato4", 0.8), 
+     scales::alpha("goldenrod3", 0.8))) + 
   geom_tile() +
   theme(axis.line = element_blank(),
         panel.grid = element_blank())
@@ -276,7 +280,6 @@ combined_df_MAGs <- full_grid_MAGs %>%
 combined_df_16S$SampleID <- factor(combined_df_16S$SampleID, levels = sample_order)
 combined_df_MAGs$SampleID <- factor(combined_df_MAGs$SampleID, levels = sample_order)
 
-# plot
 plot_16S <- ggplot(combined_df_16S, aes(x = SampleID, y = Value, fill = Genus)) +
   geom_bar(stat = "identity") +
   theme_minimal() +
@@ -293,7 +296,6 @@ plot_MAGs <- ggplot(combined_df_MAGs, aes(x = SampleID, y = Value, fill = Genus)
   labs(title = "MAGs microbiota profile", y = "Relative Abundance", x = "Samples") +
   scale_fill_manual(values = c("darkgoldenrod1", "salmon2", "tomato4"))
 
-# Combine plots vertically
 mag16plot <- plot_grid(plot_16S, plot_MAGs, ncol = 1, align = "v")
 mag16plot
 
@@ -306,16 +308,13 @@ mag16plot
 
 ### Phyloseq object generation:
 ```{r phyloseq object setup}
-# Subset vOTU virome table based on vOTU IDs in size_virome and set vOTU as row names
-virus_abun_cf <- virus_abun_cf %>%
+virus_abun_cf2 <- virus_abun_cf %>%
   filter(vOTU %in% virus_length_cf$seq_name) %>%
  column_to_rownames(var = "vOTU") 
 
 virus_abun_cf[is.na(virus_abun_cf)] <- 0
 virus_abun_cf <- virus_abun_cf %>% as_tibble()
 
-
-# phyloseq object
 physeq <- phyloseq(otu_table((virus_abun_cf), taxa_are_rows = TRUE),
                              tax_table(as.matrix(virus_tax_cf)),
                              sample_data(metadata_cf))
@@ -324,15 +323,16 @@ subset_alii <- subset_taxa(physeq, Host_family == "Vibrionaceae")
 
 ```
 
+
 ```{r}
-rel_abun_all <- subset_samples(physeq, Category %in% c("Mycoplasma sp.", "Aliivibrio sp.", "Sick fish, no 16S"))
-otu_table(rel_abun_all) <- otu_table(rel_abun_all) + 1
-sample_order <- sample_names(rel_abun_all)[order(sample_data(rel_abun_all)$Category)]
+barplot_all <- subset_samples(physeq, Category %in% c("Mycoplasma sp.", "Aliivibrio sp.", "Unknown microbiota"))
+otu_table(barplot_all) <- otu_table(barplot_all) + 1
+sample_order <- sample_names(barplot_all)[order(sample_data(barplot_all)$Category)]
 
-rel_abun1 <- rel_abun_all
-taxa_names(rel_abun1) <- tax_table(rel_abun1)[, "vOTU"]
+plot_1 <- barplot_all
+taxa_names(plot_1) <- tax_table(plot_1)[, "vOTU"]
 
-p1 <- plot_heatmap(rel_abun1,
+p1 <- plot_heatmap(plot_1,
                    method = "NMDS",
                    distance = "bray",
                    sample.label = "Sample_name",
@@ -340,32 +340,37 @@ p1 <- plot_heatmap(rel_abun1,
 
 ord_sample_order <- unique(p1$data$Sample)
 
-p1 <- plot_heatmap(rel_abun1,
+p1 <- plot_heatmap(plot_1,
                    method = NULL,
                    sample.order = ord_sample_order,
                    sample.label = "Sample_name",
                    taxa.label = "vOTU") +
   scale_fill_gradientn(colors = c("white", "dodgerblue2", "lightblue")) +
   labs(y = "vOTU") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5),
+  theme(axis.text.x = element_text(angle = 0, vjust = 0.5, size=8),
         axis.title.x = element_blank(),
-        axis.ticks.x = element_blank()) +
+        axis.ticks.x = element_blank(),
+        axis.text.y = element_text(size=10)) +
   ggforce::facet_row(~Category, scales = "free_x", space = "free")
 
 ord_sample_order <- as.character(ord_sample_order)
 
-rel_abun2 <- prune_samples(ord_sample_order, rel_abun2)
+plot_2 <- subset_samples(subset_alii, Category %in% c("Mycoplasma sp.", "Aliivibrio sp.", "Unknown microbiota"))
 
-p2 <- plot_heatmap(rel_abun2,
+
+plot_2 <- prune_samples(ord_sample_order, plot_2)
+
+p2 <- plot_heatmap(plot_2,
                    method = NULL,
                    sample.order = ord_sample_order,
                    sample.label = "Sample_name",
                    taxa.label = "vOTU") +
   scale_fill_gradientn(colors = c("white", "goldenrod1", "orange")) +
   labs(y = "vOTU") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5),
+  theme(axis.text.x = element_text(angle = 0, vjust = 0.5, size=8),
         axis.title.x = element_blank(),
-        axis.ticks.x = element_blank()) +
+        axis.ticks.x = element_blank(),
+        axis.text.y = element_text(size=10)) +
   ggforce::facet_row(~Category, scales = "free_x", space = "free")
 
 x_title <- ggdraw() + draw_label("Samples", size = 12, hjust = 0.5)
@@ -373,27 +378,26 @@ x_title <- ggdraw() + draw_label("Samples", size = 12, hjust = 0.5)
 p1 <- cowplot::plot_grid(p1, x_title, ncol = 1, rel_heights = c(1, 0.05))
 p2 <- cowplot::plot_grid(p2, x_title, ncol = 1, rel_heights = c(1, 0.05))
 
-combined <- cowplot::plot_grid(p1, p2, ncol = 1, labels = c("A", "B"), label_size = 14)
+combined <- cowplot::plot_grid(p1, p2, ncol = 1, labels = c("A", "B"), label_size = 10, rel_heights = c(26,11))
 plot(combined)
 
+
+# svglite("heatmaps_vOTUs_figure3.svg", width = 13, height = 7)
+# plot(combined)
+# dev.off()
 
 ```
 
 ### Alpha diversity analysis between the three microbiota groups (Aliivibrio, Mycoplasma or no 16S)
 ```{r}
-# Subset physeq object
-physeq.mycoAlii.nn <- subset_samples(physeq, Category %in% c("Mycoplasma sp.","Aliivibrio sp.", "Sick fish, no 16S"))
+physeq.mycoAlii.nn <- subset_samples(physeq, Category %in% c("Mycoplasma sp.","Aliivibrio sp.", "Unknown microbiota"))
 
-#Alpha diversity using Richness, Shannon and Simpson indices
 richness <- estimate_richness(physeq, measures = c("Observed","Shannon", "Simpson"))
 md.richness <- metadata_cf[match(rownames(richness),metadata_cf$Sample_name),]
 richness <- cbind(md.richness, richness)
 
-y_labels <- c("vOTU richness", "Shannon index") 
+y_labels <- c("vOTU richness", "Shannon Index") 
 
-plot_titles <- c("Observed", "Shannon")
-
-# Loop stats and plots
 plot_list <- list()
 for (i in c("Observed", "Shannon")) { 
     divtestdata <- data.frame(vOTU = richness[, i], Category = richness$Category)
@@ -425,7 +429,7 @@ for (i in c("Observed", "Shannon")) {
 
     level_colors <- list(Bacterial_profile = c(Aliivibrio = "goldenrod1", Mycoplasma = "salmon2", none = "tomato4"))
 
-    divtestdata$Myco90 <- factor(divtestdata$Category, levels = c("Aliivibrio sp.", "Mycoplasma sp.", "Sick fish, no 16S"))
+    divtestdata$Myco90 <- factor(divtestdata$Category, levels = c("Aliivibrio sp.", "Mycoplasma sp.", "Unknown microbiota"))
 
     plot <- ggboxplot(
         divtestdata, x = "Category", y = "vOTU", 
@@ -443,17 +447,15 @@ for (i in c("Observed", "Shannon")) {
     geom_boxplot(aes(col = Myco90)) +
     geom_point(aes(col = Myco90), alpha = 0.5) +
     theme_minimal() +
-    ggtitle(plot_titles[which(c("Observed", "Shannon") == i)]) +  
     xlab("") +
     ylab(y_labels[which(c("Observed", "Shannon") == i)]) +  
-    theme(strip.background = element_blank(), axis.text.x.bottom = element_text(angle = 90, hjust = 1))
+    theme(strip.background = element_blank(), axis.text.x.bottom = element_text(angle = 90, hjust = 1)) +
+      theme_bw()
 
     plot_list[[i]] <- plot}
 
-# Adjust legend 
 plot_list[[1]] <- plot_list[[1]] + theme(legend.position = "none")
 
-# Extract the legend
 legend_b <- get_legend(
     plot_list[[2]] + 
     guides(color = guide_legend(nrow = 1)) +
@@ -461,39 +463,36 @@ legend_b <- get_legend(
 
 plot_list[[2]] <- plot_list[[2]] + theme(legend.position = "none") 
 
-# Combine individual plots into single row
 combined_plot <- cowplot::plot_grid(
     plot_list[[1]], plot_list[[2]], 
     nrow = 1)
 
-# Combine the plots 
 diversity_plot <- cowplot::plot_grid(combined_plot, 
     ncol = 1, 
     rel_heights = c(0.1, 1))
 
 plot(diversity_plot)
+
+# svglite("alpha_div_plot3_new.svg", width = 8, height = 7)
+# plot(diversity_plot)
+# dev.off()
 ```
 
 
 ### MAG module completion
 ```{r, print=F}
-# Load data 
 module_completion <- read.table(file='/Users/zts270/Desktop/01_CrappyFish_manuscript/MAGs/CF_mags_no2/metabolic_independence/metabolism-module_pathwise_completeness-MATRIX.txt', header = TRUE, sep = "\t")
 
-# Load metabolic completion values across genomes
 module_info <- read.csv("~/Desktop/01_CrappyFish_manuscript/MAGs/CF_mags_no2/metabolic_independence/modules_info.txt", sep = "\t")
 
-# Load external genomes (pangenomes)
 external_genomes <- read.table(file='/Users/zts270/Desktop/01_CrappyFish_manuscript/MAGs/CF_mags_no2/metabolic_independence/external-genomes.txt', header = TRUE, sep = "\t")
 
 external_genomes <- external_genomes %>%
   dplyr::mutate(Group = c(rep("Mycoplasma", 21), rep("Aliivibrio", 11)))
 
-# df generation
 df <- melt(module_completion)
 colnames(df) <- c('module', 'genome', 'completion')
 
-# Associate genomes with groups 
 df$group <- external_genomes$Group[match(df$genome, external_genomes$name)]
 df$individual <- external_genomes$individual[match(df$genome, external_genomes$name)]
 
@@ -504,27 +503,31 @@ p_to_stars <- function(p) {
 groups_order <- c("Mycoplasma", "Aliivibrio")
 group_colors <- c("goldenrod1", "salmon2") 
 
-# Wilcox test
 p_value <- wilcox.test(df[df$group == "Mycoplasma", ]$completion, df[df$group == "Aliivibrio", ]$completion, exact = FALSE)$p.value
 
-# Plot
 plot_all_genomes <- ggplot(data=df, aes(x=group, y=completion, group=group)) +
     geom_violin(aes(fill=group), color="black", fill="grey", alpha=0.3) +
     geom_jitter(aes(shape=group, color=group), width=0.2, height=0.01, size=2.5, alpha=0.1) +
   coord_cartesian(ylim = c(0, 1), clip = "off") +
-  scale_shape_manual(values = c(16, 17)) +  
+  scale_shape_manual(values = c(16, 17),
+  labels = c("Mycoplasma" = expression(italic("Mycoplasma")), "Aliivibrio" = expression(italic("Aliivibrio")))) +  
   annotate("text", x=1.5, y=1.03, label=paste(p_to_stars(p_value)), size=3.5) +
   geom_segment(aes(x=1, xend=2, y=1.025, yend=1.025), size=0.5) +  
   geom_segment(aes(x=1, xend=1, y=1.025, yend=1.02), size=0.5) +   
   geom_segment(aes(x=2, xend=2, y=1.025, yend=1.02), size=0.5) +   
   theme_classic() +
   theme(legend.position="none",
-        axis.title.y = element_text(size=13, angle=90, vjust=0.5),
-        axis.ticks.y = element_blank()) +
+        axis.title.y = element_text(size=14, vjust=0.5),
+        axis.ticks.y = element_blank(),
+        axis.text.x = element_text(size = 14),
+        axis.title.x = element_text(size = 14)) +
   ylab("Estimated KEGG module completion") +
   xlab("Pangenomes") +
-  scale_x_discrete(limits = groups_order) +
-  scale_color_manual(values = group_colors)
+  scale_x_discrete(limits = groups_order, labels = c("Mycoplasma" = expression(italic("Mycoplasma")), 
+                                                     "Aliivibrio" = expression(italic("Aliivibrio")))) +  
+  scale_color_manual(values = group_colors,
+                     labels = c("Mycoplasma" = expression(italic("Mycoplasma")), 
+                                "Aliivibrio" = expression(italic("Aliivibrio")))) 
 
 
 df_filt <- df %>% filter(genome %in% c("CF_MAG_00002", "CF_MAG_00001_contigs"))
@@ -544,22 +547,32 @@ plot_CF_genomes <- df %>%
   theme_classic() +
   theme(legend.position="right",
         legend.text = element_text(size=14),
+        legend.title = element_text(size = 14),
         axis.line.y = element_blank(),
         axis.title.y = element_blank(),
         axis.text.y = element_blank(),
-        axis.text.x = element_text(size=13, angle=90, vjust=0.5),
-        axis.title.x = element_blank(),
+        axis.text.x = element_text(size=14, vjust=0.5),
+        axis.title.x = element_text(size = 14),
         plot.margin = unit(c(2,2,2,2), "cm")) +
-    ylab(NULL) +
+  ylab(NULL) +
   xlab("Study Genomes") +
-  labs(fill = "Genus", shape = "Genus", color = "Genus", size=13) +
+  labs(fill = "Genus", shape = "Genus", color = "Genus") +
    guides(fill = guide_legend(keywidth = 2, keyheight = 2)) +
-  scale_x_discrete(limits = groups_order) +
+  scale_x_discrete( limits = groups_order, labels = c("Mycoplasma" = "SSM", "Aliivibrio" = "SSA")) +
   scale_fill_manual(values = group_colors) +
   scale_color_manual(values = group_colors) +
    guides(shape = guide_legend(override.aes = list(alpha = 1, size = 5)), 
          color = guide_legend(override.aes = list(alpha = 1))) +
-  theme_classic()
+  scale_fill_manual(values = group_colors,
+                  labels = c("Mycoplasma" = expression(italic("Mycoplasma")), 
+                             "Aliivibrio" = expression(italic("Aliivibrio")))) +
+scale_color_manual(values = group_colors,
+                   labels = c("Mycoplasma" = expression(italic("Mycoplasma")), 
+                              "Aliivibrio" = expression(italic("Aliivibrio")))) +
+scale_shape_manual(values = c(16, 17),
+                   labels = c("Mycoplasma" = expression(italic("Mycoplasma")), 
+                              "Aliivibrio" = expression(italic("Aliivibrio"))))
+
 
 df %>% filter(completion == 1) %>% group_by(group) %>% summarise(n = n())
 
@@ -575,247 +588,172 @@ MoI <- df %>% filter(genome %in% c("CF_MAG_00002", "CF_MAG_00001_contigs")) %>%
   left_join(module_info, by = "module")
 
 MoI_plot <- MoI %>% 
-  ggplot(aes(x = group, y = subcategory, fill = completion)) + 
+  ggplot(aes(x = group, subcategory, fill = completion)) + 
   geom_tile(color = "white", size = 0.02) +
   scale_fill_gradient(low = "white", high = "darkslategrey") +
+  scale_x_discrete( limits = groups_order, labels = c("Mycoplasma" = "SSM", "Aliivibrio" = "SSA")) +
   labs(y = "",
        x = "",
        fill = "Completion") +
   theme_minimal() +
   theme(axis.line = element_blank(),
         panel.grid = element_blank(),
-        axis.text.y = element_text(size=12),
-        axis.text.x = element_text(size=12))
+        legend.title = element_text(margin = margin(b = 20), size=14),
+        axis.text.y = element_text(size=14),
+        axis.text.x = element_text(size=14))
 
 
-((plot_all_genomes + plot_CF_genomes) | MoI_plot + plot_layout(guides = "collect"))
+metabolic_plot <- ((plot_all_genomes + plot_CF_genomes) | MoI_plot + plot_layout(guides = "collect", widths = c(3, 1)))
+
+metabolic_plot
+
+
+# svglite("fig5_metabolic_plot3.svg", width = 17.5, height = 9)
+# plot(metabolic_plot)
+# dev.off()
 
 ```
 
 ### Plot vOTU annotations
 ```{r}
-# Data
 data <- read.table("/Users/zts270/Desktop/01_CrappyFish_manuscript/data/move_to_dori/pharokka_cds_functions.tsv", 
-                   header=TRUE, sep="\t")
+                   header=TRUE, sep="\t") 
 
-# Reshape the data for heatmap
-heatmap_data <- dcast(data, Description ~ vOTU, value.var = "Count", fill = 0)
+heatmap_data <- dcast(data, Description ~ vOTU, value.var = "Count", fill = 0) 
 
-# Set row names to be the descriptions
 rownames(heatmap_data) <- heatmap_data$Description
 heatmap_data <- heatmap_data[, -1]
 
-heatmap_data[heatmap_data > 0] <- 1  # Convert to binary 
+heatmap_data[heatmap_data > 0] <- 1 
 
 function_descriptions <- rownames(heatmap_data)
 
-# Assign functions to broad categories
 function_categories <- sapply(function_descriptions, function(x) {
-  if (grepl("head|tail|connector", x, ignore.case = TRUE)) {
+  if (grepl("Head|Tail|Connector", x, ignore.case = TRUE)) {
     return("Structural")
-  } else if (grepl("DNA|RNA|nucleotide|transcription", x, ignore.case = TRUE)) {
+  } else if (grepl("DNA|RNA|Nucleotide|Transcription", x, ignore.case = TRUE)) {
     return("Phage Metabolism")
-  } else if (grepl("lysis", x, ignore.case = TRUE)) {
-    return("Lysis")
-  } else if (grepl("integration and excision", x, ignore.case = TRUE)) {
+  } else if (grepl("Lysis", x, ignore.case = TRUE)) {
+    return("Lytic")
+  } else if (grepl("Integration and Excision", x, ignore.case = TRUE)) {
     return("Temperate")
-  } else if (grepl("tRNA|CRISPR|tmRNA|moron|VFDB|CARD", x, ignore.case = TRUE)) {
+  } else if (grepl("tRNA|CRISPR|tmRNA|Moron|Virulence|AMR", x, ignore.case = TRUE)) {
     return("Accessory Genes")
-  } else if (grepl("other|CDS|unknown", x, ignore.case = TRUE)) {
+  } else if (grepl("Other|CDS|Unknown", x, ignore.case = TRUE)) {
     return("Unknown/CDS") 
   } 
 })
 
-# Create a df for row annotation
 row_annotation <- data.frame(Category = factor(function_categories))
 rownames(row_annotation) <- function_descriptions
 
-# Aligned
 row_annotation <- as.data.frame(row_annotation)
 rownames(row_annotation) <- rownames(heatmap_data)
 
-# Sort heatmap data by functional categories 
 sorted_indices <- order(row_annotation$Category)
 heatmap_data <- heatmap_data[sorted_indices, ]
 row_annotation <- row_annotation[sorted_indices, , drop = FALSE]
 
-# Extract the CDS counts
 cds_counts <- aggregate(data$Count, by = list(vOTU = data$vOTU), sum)
 colnames(cds_counts) <- c("vOTU", "CDS_count")
 
-# Column annotation for CDS count
 column_annotation <- data.frame(CDS_count = cds_counts$CDS_count)
 rownames(column_annotation) <- cds_counts$vOTU
 
-# Align 
 column_annotation <- column_annotation[match(colnames(heatmap_data), rownames(column_annotation)), , drop = FALSE]
 
-# Category colours
 category_colors <- c(
   "Structural" = "deepskyblue3",
   "Phage Metabolism" = "gold2",
-  "Lysis" = "orangered4",
+  "Lytic" = "orangered4",
   "Temperate" = "aquamarine3",
   "Accessory Genes" = "tan",
   "Unknown/CDS" = "darkorange3"
 )
 
-# Row annotation 
 row_anno <- rowAnnotation(
-  Category = factor(row_annotation$Category), 
-  col = list(Category = category_colors) )
+  "Annotation Category" = factor(row_annotation$Category), 
+  col = list("Annotation Category" = category_colors),
+  show_annotation_name = FALSE,
+  annotation_name_gp = gpar(fontsize = 8, fontface = "plain"),  
+  annotation_legend_param = list(
+    "Annotation Category" = list(  
+      title_gp = gpar(fontface = "plain", fontsize = 10)  
+    )
+  )
+)
 
-color_palette <- colorRamp2(c(0, 1), c("white", "darkslategrey"))
+color_palette <- c("0" = "ghostwhite", "1" = "darkslategrey")
 
-# Plot heatmap
+
 anno_heatmap <- Heatmap(
   as.matrix(heatmap_data),
   name = "Presence/Absence",
   col = color_palette,
-  top_annotation = HeatmapAnnotation(CDS_count = anno_barplot(cds_counts$CDS_count, 
-                                                               gp = gpar(fill = "lightgray"), 
-                                                               axis = TRUE)),
+  top_annotation = HeatmapAnnotation("CDS count" = anno_barplot(cds_counts$CDS_count, 
+                                                               gp = gpar(fill = "lightblue4", col = NA), 
+                                                               axis = TRUE),
+                                     annotation_name_gp = gpar(fontsize = 10)),
   right_annotation = row_anno,  
   cluster_rows = FALSE,          
   cluster_columns = FALSE,      
   show_row_names = TRUE,         
   show_column_names = TRUE,      
   row_names_gp = gpar(fontsize = 10),  
-  column_names_gp = gpar(fontsize = 10) 
+  column_names_gp = gpar(fontsize = 10),
+  heatmap_legend_param = list(
+    title_gp = gpar(fontface = "plain", fontsize = 10)
+  )
 )
 
 anno_heatmap
-```
 
-
-################
-# qPCR and Ct data:
-################
-
-```{r load libraries}
-library(tidyverse)
-library(phyloseq)
-library(readxl)
-library(ggpubr)
-library(rstatix)
+# svglite("pharokka_heatmap_fig4.svg", width = 9, height = 5)
+# plot(anno_heatmap)
+# dev.off()
 
 ```
 
-
-```{r load data}
-# metadata and vOTU table
-metadata_cf <- read.csv("/metadata_cf.csv", sep = ";")  %>% filter(!Sample_name %in% c("S02", "H04"))
-rownames(metadata_cf) <- metadata_cf$Sample_name %>% as.matrix()
-
-virus_tax_cf <-  read_excel("/tax_vOTU_overview.xlsx", sheet = "Sheet1") 
-virus_length_cf <- read.csv("/vOTU_length.tsv", sep = "\t")
-virus_abun_cf <- read.csv("/rpkm_0.02_abundance_table.csv", sep = ";") %>%
-  filter(vOTU %in% virus_length_cf$seq_name) %>%
- column_to_rownames(var = "vOTU") %>% as_tibble()
-
-
-# CT data
-CTs <- read.csv("/ct_plot_input_file.csv") %>% as.data.frame()
-md <- read.csv("/Metadata_filtered.csv")
+### Cycle threshold correlation analysis with Aliivibrio vOTUs.
+```{r}
+CTs <- read.csv("/Users/zts270/Bioinformatics/R_data_analyses/PhD_viruses_and_metagenomes_R/CrappyFish/ct_plot_input_file.csv") %>% as.data.frame()
+md <- read.csv("/Users/zts270/Bioinformatics/R_data_analyses/PhD_viruses_and_metagenomes_R/CrappyFish/Metadata_filtered.csv")
+CSW_df <- read.csv("/Users/zts270/Bioinformatics/R_data_analyses/PhD_viruses_and_metagenomes_R/CrappyFish/CSW_Bozzi_Samples.csv", sep=",", na.strings = "") %>% as.data.frame()
 
 CTs <- CTs %>%
   full_join(md, by = "Sample") %>%
   na.omit()
 
-CSW_df <- read.csv("/CSW_Bozzi_Samples.csv", sep=",", na.strings = "") %>% as.data.frame()
-
 CSW_df <- CSW_df %>% 
   rename(Sample = Bozzi_et_al) %>%
   na.omit() %>%
   full_join(CTs, by = "Sample")
-```
 
-```{r data wrangling}
-# phyloseq object
-physeq <- phyloseq(otu_table((virus_abun_cf), taxa_are_rows = TRUE),
+physeq_ct <- phyloseq(otu_table((virus_abun_cf), taxa_are_rows = TRUE),
                              tax_table(as.matrix(virus_tax_cf)),
                              sample_data(metadata_cf))
 
-# Calculate richness per sample (total number of vOTUs)
-richness <- estimate_richness(physeq, measures = "Observed")  
+richness <- estimate_richness(physeq_ct, measures = "Observed") 
 richness$Sample_names <- rownames(richness)  
-merged_data <- merge(richness, CSW_df, by = "Sample_names")  %>% filter(!OTU %in% "contaminants")
-```
 
-```{r plot regression}
-# Plot with Spearman correlation
-ggplot(merged_data, aes(x = Observed, y = Ct, color = Myco90)) +  
-  geom_point() +
-  geom_smooth(method = "lm") +  # Add regression line
-  labs(x = "vOTU Richness", y = "Ct Value", title = "Richness vs. Ct with Regression Lines") +
-  theme_minimal() +
-  facet_wrap(~Myco90, scales = "free") +
-  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "~`,`~")), 
-           label.x = Inf, label.y = Inf, 
-           hjust = 1.2, vjust = 2,  # Align to upper right corner
-           method = "spearman", color = "black")  # Use Spearman correlation
+merged_data <- merge(richness, CSW_df, by = "Sample_names") 
 
 aliivibrio_data <- merged_data %>% filter(Myco90 == "Aliivibrio")
 
 ct_vs_vOTU <- ggplot(aliivibrio_data, aes(x = Observed, y = Ct, color = Myco90)) +  
   geom_point(color = "goldenrod1") +
-  geom_smooth(method = "lm", color = "goldenrod1") +  # Add regression line
+  geom_smooth(method = "lm", color = "goldenrod1") +  
   labs(x = "vOTU Richness", y = "Ct Value", title = "Bacterial biomass and vOTU richness") +
   theme_minimal() +
-  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "~`,`~")), 
+  stat_cor(aes(label = paste(..rr.label.., "~italic(P)*`=`~", ..p.value..)), 
            label.x = Inf, label.y = Inf, 
            hjust = 1.15, vjust = 1.8, 
            method = "spearman", color = "black")
 
-plot(ct_vs_vOTU)
+ct_vs_vOTU
+
+# svglite("ct_vs_vOTU_figure3.svg", width = 5, height = 4.5)
+# plot(ct_vs_vOTU)
+# dev.off()
+
 ```
-
-
-```{r box plot sample difference}
-stat.test <- CSW_df %>%
-  filter(!is.na(Wolters_et_al),
-         OTU == "OTU2") %>%
-  dplyr::mutate(Group = ifelse(Proportion >0.9, "SSM", "SSA")) %>%
-  wilcox_test(Ct~Group)
-
-boxplotA <- CSW_df %>%
-  filter(!is.na(Wolters_et_al),
-         OTU == "OTU2") %>%
-  dplyr::mutate(Group = ifelse(Proportion >0.9, "SSM", "SSA")) %>%
-  ggboxplot(x = "Group", y = "Ct",
-            fill = "Group") +
-  scale_y_reverse() +
-  scale_fill_manual(values = c("SSM" = "salmon2", "SSA" = "goldenrod1")) +
-  stat_pvalue_manual(stat.test, label = "Wilcoxon Rank Sum Test: {p}", y.position = -10) +
-  theme(strip.background = element_blank(), axis.text.x.bottom = element_text(angle = 60, hjust =1)) +
-  theme(axis.text.x.bottom = element_text()) +
-  theme(legend.position = "right") +
-  guides(fill=guide_legend(title="Microbiota profile")) +
-  xlab("Microbiota profile")
-
-
-stat.test <- CSW_df %>%
-  filter(!is.na(Wolters_et_al),
-         OTU == "OTU2") %>%
-  dplyr::mutate(Health_state = ifelse(Health_state == "H", "Healthy", "Sick")) %>%
-  wilcox_test(Ct~Health_state)
-
-boxplotB <- CSW_df %>%
-  filter(!is.na(Wolters_et_al),
-         OTU == "OTU2") %>%
-  dplyr::mutate(Health_state = factor(ifelse(Health_state == "H", "Healthy", "Sick"), levels = c("Sick", "Healthy"))) %>%
-  ggboxplot(x = "Health_state", y = "Ct",
-            fill = "Health_state") +
-  scale_y_reverse() +
-  scale_fill_manual(values = c("Healthy" = "dodgerblue3", "Sick" = "lightblue3")) +
-  stat_pvalue_manual(stat.test, label = "Wilcoxon Rank Sum Test: {p}", y.position = -10) +
-  theme(axis.text.x.bottom = element_text()) +
-  theme(legend.position = "right") + 
-  guides(fill=guide_legend(title="Fish phenotype")) +
-  xlab("Fish phenotype")
-
-boxesAB <- cowplot::plot_grid(boxplotA,boxplotB, nrow = 1)
-boxesAB
-```
-
-
