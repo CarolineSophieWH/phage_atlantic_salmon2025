@@ -8,3 +8,4 @@ Summary: Viral communities were identified and profilled across samples, which w
 
 The 16S rRNA data from the same samples, was generated and is publically available by Bozzi et al 2020 (https://github.com/DavideBozzi/Bozzi_et_al_2020_analysis) DOI: https://doi.org/10.1186/s42523-021-00096-2
 
+<img width="3238" height="2182" alt="Mirror Graphical abstract (3)" src="https://github.com/user-attachments/assets/537262d5-936d-4541-8cf5-456b3a70d89d" />
