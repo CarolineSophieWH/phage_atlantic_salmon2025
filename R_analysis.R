@@ -22,26 +22,26 @@ library(hilldiv);packageVersion("hilldiv")
 
 ```{r Load virome data}
 #metadata
-metadata_cf <- read.csv("~/Desktop/01_CrappyFish_manuscript/data/virome_data/metadata.csv", sep = ",")  #%>% filter(!Sample_name %in% c("S02", "H04")) #failed samples removed - only 38 used downstream
+metadata_cf <- read.csv("/metadata.csv", sep = ",")  #%>% filter(!Sample_name %in% c("S02", "H04")) #failed samples removed - only 38 used downstream
 rownames(metadata_cf) <- metadata_cf$Sample_name %>% as.matrix()
 
 # virus df
-virus_tax_cf <-  read_excel("/Users/zts270/Desktop/01_CrappyFish_manuscript/data/move_to_dori/vOTU_files/tax_vOTU_overview.xlsx", sheet = "Sheet1") 
-virus_abun_cf <- read.csv("/Users/zts270/Desktop/01_CrappyFish_manuscript/data/move_to_dori/rpkm_0.02_abundance_table.csv", sep = ";") 
-virus_length_cf <- read.csv("/Users/zts270/Desktop/01_CrappyFish_manuscript/data/move_to_dori/vOTU_files/vOTU_length.tsv", sep = "\t")
+virus_tax_cf <-  read_excel("/tax_vOTU_overview.xlsx", sheet = "Sheet1") 
+virus_abun_cf <- read.csv("/rpkm_0.02_abundance_table.csv", sep = ";") 
+virus_length_cf <- read.csv("/vOTU_length.tsv", sep = "\t")
 
 ```
 
 
 ```{r Load bacterial 16S rRNA data}
 # bacteria df
-bacteria_16S <- read.csv("~/Desktop/01_CrappyFish_manuscript/data/16S_data/Bozzi_OTUs.csv", sep = ";") %>% as.data.frame() 
-bac.tax <- read.csv("~/Desktop/01_CrappyFish_manuscript/data/16S_data/Bozzi_bacteria_taxonomy.csv")
-bac.meta <- read.csv("~/Desktop/01_CrappyFish_manuscript/data/16S_data/Bozzi_bacteria_metadata.csv", sep = ";") 
+bacteria_16S <- read.csv("/Bozzi_OTUs.csv", sep = ";") %>% as.data.frame() 
+bac.tax <- read.csv("/Bozzi_bacteria_taxonomy.csv")
+bac.meta <- read.csv("/Bozzi_bacteria_metadata.csv", sep = ";") 
 
-virome.bac <- read.csv("/Users/zts270/Desktop/01_CrappyFish_manuscript/data/16S_data/rpkm_0.02_abundance_table_bacteria.csv", sep = ";") # virome data but only in samples overlapping with samples from which 16S has been generated
+virome.bac <- read.csv("/rpkm_0.02_abundance_table_bacteria.csv", sep = ";") # virome data but only in samples overlapping with samples from which 16S has been generated
 
-bacteria_MAGs <- read.csv("/Users/zts270/Desktop/01_CrappyFish_manuscript/MAGs/CF_mags_no2/MAG_cov_aliMyco.csv", sep = ",")  
+bacteria_MAGs <- read.csv("/MAG_cov_aliMyco.csv", sep = ",")  
 
 otus_in_otu_table <- colnames(bacteria_16S)[-1]
 
@@ -481,11 +481,11 @@ plot(diversity_plot)
 
 ### MAG module completion
 ```{r, print=F}
-module_completion <- read.table(file='/Users/zts270/Desktop/01_CrappyFish_manuscript/MAGs/CF_mags_no2/metabolic_independence/metabolism-module_pathwise_completeness-MATRIX.txt', header = TRUE, sep = "\t")
+module_completion <- read.table(file='/metabolism-module_pathwise_completeness-MATRIX.txt', header = TRUE, sep = "\t")
 
-module_info <- read.csv("~/Desktop/01_CrappyFish_manuscript/MAGs/CF_mags_no2/metabolic_independence/modules_info.txt", sep = "\t")
+module_info <- read.csv("/modules_info.txt", sep = "\t")
 
-external_genomes <- read.table(file='/Users/zts270/Desktop/01_CrappyFish_manuscript/MAGs/CF_mags_no2/metabolic_independence/external-genomes.txt', header = TRUE, sep = "\t")
+external_genomes <- read.table(file='/external-genomes.txt', header = TRUE, sep = "\t")
 
 external_genomes <- external_genomes %>%
   dplyr::mutate(Group = c(rep("Mycoplasma", 21), rep("Aliivibrio", 11)))
@@ -616,7 +616,7 @@ metabolic_plot
 
 ### Plot vOTU annotations
 ```{r}
-data <- read.table("/Users/zts270/Desktop/01_CrappyFish_manuscript/data/move_to_dori/pharokka_cds_functions.tsv", 
+data <- read.table("/pharokka_cds_functions.tsv", 
                    header=TRUE, sep="\t") 
 
 heatmap_data <- dcast(data, Description ~ vOTU, value.var = "Count", fill = 0) 
@@ -716,9 +716,9 @@ anno_heatmap
 
 ### Cycle threshold correlation analysis with Aliivibrio vOTUs.
 ```{r}
-CTs <- read.csv("/Users/zts270/Bioinformatics/R_data_analyses/PhD_viruses_and_metagenomes_R/CrappyFish/ct_plot_input_file.csv") %>% as.data.frame()
-md <- read.csv("/Users/zts270/Bioinformatics/R_data_analyses/PhD_viruses_and_metagenomes_R/CrappyFish/Metadata_filtered.csv")
-CSW_df <- read.csv("/Users/zts270/Bioinformatics/R_data_analyses/PhD_viruses_and_metagenomes_R/CrappyFish/CSW_Bozzi_Samples.csv", sep=",", na.strings = "") %>% as.data.frame()
+CTs <- read.csv("/ct_plot_input_file.csv") %>% as.data.frame()
+md <- read.csv("/Metadata_filtered.csv")
+CSW_df <- read.csv("/CSW_Bozzi_Samples.csv", sep=",", na.strings = "") %>% as.data.frame()
 
 CTs <- CTs %>%
   full_join(md, by = "Sample") %>%
