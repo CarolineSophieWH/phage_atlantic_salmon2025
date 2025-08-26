@@ -1,0 +1,353 @@
+Description	Count	contig	vOTU
+CDS	65	NODE_1_length_56040_cov_10.309427	vOTU_1
+connector	0	NODE_1_length_56040_cov_10.309427	vOTU_1
+DNA, RNA and nucleotide metabolism	3	NODE_1_length_56040_cov_10.309427	vOTU_1
+head and packaging	5	NODE_1_length_56040_cov_10.309427	vOTU_1
+integration and excision	0	NODE_1_length_56040_cov_10.309427	vOTU_1
+lysis	0	NODE_1_length_56040_cov_10.309427	vOTU_1
+moron, auxiliary metabolic gene and host takeover	0	NODE_1_length_56040_cov_10.309427	vOTU_1
+other	4	NODE_1_length_56040_cov_10.309427	vOTU_1
+tail	2	NODE_1_length_56040_cov_10.309427	vOTU_1
+transcription regulation	0	NODE_1_length_56040_cov_10.309427	vOTU_1
+unknown function	51	NODE_1_length_56040_cov_10.309427	vOTU_1
+tRNAs	0	NODE_1_length_56040_cov_10.309427	vOTU_1
+CRISPRs	0	NODE_1_length_56040_cov_10.309427	vOTU_1
+tmRNAs	0	NODE_1_length_56040_cov_10.309427	vOTU_1
+VFDB_Virulence_Factors	0	NODE_1_length_56040_cov_10.309427	vOTU_1
+CARD_AMR_Genes	0	NODE_1_length_56040_cov_10.309427	vOTU_1
+CDS	51	NODE_2_length_52364_cov_8.693168	vOTU_3
+connector	0	NODE_2_length_52364_cov_8.693168	vOTU_3
+DNA, RNA and nucleotide metabolism	8	NODE_2_length_52364_cov_8.693168	vOTU_3
+head and packaging	4	NODE_2_length_52364_cov_8.693168	vOTU_3
+integration and excision	0	NODE_2_length_52364_cov_8.693168	vOTU_3
+lysis	0	NODE_2_length_52364_cov_8.693168	vOTU_3
+moron, auxiliary metabolic gene and host takeover	0	NODE_2_length_52364_cov_8.693168	vOTU_3
+other	0	NODE_2_length_52364_cov_8.693168	vOTU_3
+tail	0	NODE_2_length_52364_cov_8.693168	vOTU_3
+transcription regulation	0	NODE_2_length_52364_cov_8.693168	vOTU_3
+unknown function	39	NODE_2_length_52364_cov_8.693168	vOTU_3
+tRNAs	0	NODE_2_length_52364_cov_8.693168	vOTU_3
+CRISPRs	0	NODE_2_length_52364_cov_8.693168	vOTU_3
+tmRNAs	0	NODE_2_length_52364_cov_8.693168	vOTU_3
+VFDB_Virulence_Factors	0	NODE_2_length_52364_cov_8.693168	vOTU_3
+CARD_AMR_Genes	0	NODE_2_length_52364_cov_8.693168	vOTU_3
+CDS	17	NODE_6_length_14680_cov_10.716347	vOTU_7
+connector	0	NODE_6_length_14680_cov_10.716347	vOTU_7
+DNA, RNA and nucleotide metabolism	2	NODE_6_length_14680_cov_10.716347	vOTU_7
+head and packaging	2	NODE_6_length_14680_cov_10.716347	vOTU_7
+integration and excision	0	NODE_6_length_14680_cov_10.716347	vOTU_7
+lysis	0	NODE_6_length_14680_cov_10.716347	vOTU_7
+moron, auxiliary metabolic gene and host takeover	0	NODE_6_length_14680_cov_10.716347	vOTU_7
+other	1	NODE_6_length_14680_cov_10.716347	vOTU_7
+tail	0	NODE_6_length_14680_cov_10.716347	vOTU_7
+transcription regulation	0	NODE_6_length_14680_cov_10.716347	vOTU_7
+unknown function	12	NODE_6_length_14680_cov_10.716347	vOTU_7
+tRNAs	0	NODE_6_length_14680_cov_10.716347	vOTU_7
+CRISPRs	0	NODE_6_length_14680_cov_10.716347	vOTU_7
+tmRNAs	0	NODE_6_length_14680_cov_10.716347	vOTU_7
+VFDB_Virulence_Factors	0	NODE_6_length_14680_cov_10.716347	vOTU_7
+CARD_AMR_Genes	0	NODE_6_length_14680_cov_10.716347	vOTU_7
+CDS	23	NODE_5_length_14811_cov_7.549986	vOTU_6
+connector	0	NODE_5_length_14811_cov_7.549986	vOTU_6
+DNA, RNA and nucleotide metabolism	1	NODE_5_length_14811_cov_7.549986	vOTU_6
+head and packaging	3	NODE_5_length_14811_cov_7.549986	vOTU_6
+integration and excision	0	NODE_5_length_14811_cov_7.549986	vOTU_6
+lysis	0	NODE_5_length_14811_cov_7.549986	vOTU_6
+moron, auxiliary metabolic gene and host takeover	0	NODE_5_length_14811_cov_7.549986	vOTU_6
+other	0	NODE_5_length_14811_cov_7.549986	vOTU_6
+tail	1	NODE_5_length_14811_cov_7.549986	vOTU_6
+transcription regulation	0	NODE_5_length_14811_cov_7.549986	vOTU_6
+unknown function	18	NODE_5_length_14811_cov_7.549986	vOTU_6
+tRNAs	0	NODE_5_length_14811_cov_7.549986	vOTU_6
+CRISPRs	0	NODE_5_length_14811_cov_7.549986	vOTU_6
+tmRNAs	0	NODE_5_length_14811_cov_7.549986	vOTU_6
+VFDB_Virulence_Factors	0	NODE_5_length_14811_cov_7.549986	vOTU_6
+CARD_AMR_Genes	0	NODE_5_length_14811_cov_7.549986	vOTU_6
+CDS	5	NODE_67_length_8038_cov_12.352421	vOTU_17
+connector	0	NODE_67_length_8038_cov_12.352421	vOTU_17
+DNA, RNA and nucleotide metabolism	1	NODE_67_length_8038_cov_12.352421	vOTU_17
+head and packaging	1	NODE_67_length_8038_cov_12.352421	vOTU_17
+integration and excision	0	NODE_67_length_8038_cov_12.352421	vOTU_17
+lysis	0	NODE_67_length_8038_cov_12.352421	vOTU_17
+moron, auxiliary metabolic gene and host takeover	0	NODE_67_length_8038_cov_12.352421	vOTU_17
+other	0	NODE_67_length_8038_cov_12.352421	vOTU_17
+tail	0	NODE_67_length_8038_cov_12.352421	vOTU_17
+transcription regulation	0	NODE_67_length_8038_cov_12.352421	vOTU_17
+unknown function	3	NODE_67_length_8038_cov_12.352421	vOTU_17
+tRNAs	0	NODE_67_length_8038_cov_12.352421	vOTU_17
+CRISPRs	0	NODE_67_length_8038_cov_12.352421	vOTU_17
+tmRNAs	0	NODE_67_length_8038_cov_12.352421	vOTU_17
+VFDB_Virulence_Factors	0	NODE_67_length_8038_cov_12.352421	vOTU_17
+CARD_AMR_Genes	0	NODE_67_length_8038_cov_12.352421	vOTU_17
+CDS	13	NODE_3_length_15335_cov_8.231852	vOTU_4
+connector	0	NODE_3_length_15335_cov_8.231852	vOTU_4
+DNA, RNA and nucleotide metabolism	0	NODE_3_length_15335_cov_8.231852	vOTU_4
+head and packaging	2	NODE_3_length_15335_cov_8.231852	vOTU_4
+integration and excision	0	NODE_3_length_15335_cov_8.231852	vOTU_4
+lysis	0	NODE_3_length_15335_cov_8.231852	vOTU_4
+moron, auxiliary metabolic gene and host takeover	0	NODE_3_length_15335_cov_8.231852	vOTU_4
+other	0	NODE_3_length_15335_cov_8.231852	vOTU_4
+tail	1	NODE_3_length_15335_cov_8.231852	vOTU_4
+transcription regulation	0	NODE_3_length_15335_cov_8.231852	vOTU_4
+unknown function	10	NODE_3_length_15335_cov_8.231852	vOTU_4
+tRNAs	0	NODE_3_length_15335_cov_8.231852	vOTU_4
+CRISPRs	0	NODE_3_length_15335_cov_8.231852	vOTU_4
+tmRNAs	0	NODE_3_length_15335_cov_8.231852	vOTU_4
+VFDB_Virulence_Factors	0	NODE_3_length_15335_cov_8.231852	vOTU_4
+CARD_AMR_Genes	0	NODE_3_length_15335_cov_8.231852	vOTU_4
+CDS	11	NODE_18_length_5986_cov_8.451442	vOTU_13
+connector	0	NODE_18_length_5986_cov_8.451442	vOTU_13
+DNA, RNA and nucleotide metabolism	0	NODE_18_length_5986_cov_8.451442	vOTU_13
+head and packaging	0	NODE_18_length_5986_cov_8.451442	vOTU_13
+integration and excision	0	NODE_18_length_5986_cov_8.451442	vOTU_13
+lysis	0	NODE_18_length_5986_cov_8.451442	vOTU_13
+moron, auxiliary metabolic gene and host takeover	0	NODE_18_length_5986_cov_8.451442	vOTU_13
+other	1	NODE_18_length_5986_cov_8.451442	vOTU_13
+tail	0	NODE_18_length_5986_cov_8.451442	vOTU_13
+transcription regulation	0	NODE_18_length_5986_cov_8.451442	vOTU_13
+unknown function	10	NODE_18_length_5986_cov_8.451442	vOTU_13
+tRNAs	0	NODE_18_length_5986_cov_8.451442	vOTU_13
+CRISPRs	0	NODE_18_length_5986_cov_8.451442	vOTU_13
+tmRNAs	0	NODE_18_length_5986_cov_8.451442	vOTU_13
+VFDB_Virulence_Factors	0	NODE_18_length_5986_cov_8.451442	vOTU_13
+CARD_AMR_Genes	0	NODE_18_length_5986_cov_8.451442	vOTU_13
+CDS	7	NODE_22_length_5829_cov_7.743599	vOTU_14
+connector	0	NODE_22_length_5829_cov_7.743599	vOTU_14
+DNA, RNA and nucleotide metabolism	2	NODE_22_length_5829_cov_7.743599	vOTU_14
+head and packaging	1	NODE_22_length_5829_cov_7.743599	vOTU_14
+integration and excision	0	NODE_22_length_5829_cov_7.743599	vOTU_14
+lysis	0	NODE_22_length_5829_cov_7.743599	vOTU_14
+moron, auxiliary metabolic gene and host takeover	0	NODE_22_length_5829_cov_7.743599	vOTU_14
+other	1	NODE_22_length_5829_cov_7.743599	vOTU_14
+tail	0	NODE_22_length_5829_cov_7.743599	vOTU_14
+transcription regulation	0	NODE_22_length_5829_cov_7.743599	vOTU_14
+unknown function	3	NODE_22_length_5829_cov_7.743599	vOTU_14
+tRNAs	0	NODE_22_length_5829_cov_7.743599	vOTU_14
+CRISPRs	0	NODE_22_length_5829_cov_7.743599	vOTU_14
+tmRNAs	0	NODE_22_length_5829_cov_7.743599	vOTU_14
+VFDB_Virulence_Factors	0	NODE_22_length_5829_cov_7.743599	vOTU_14
+CARD_AMR_Genes	0	NODE_22_length_5829_cov_7.743599	vOTU_14
+CDS	30	NODE_4_length_15002_cov_5.222723	vOTU_5
+connector	0	NODE_4_length_15002_cov_5.222723	vOTU_5
+DNA, RNA and nucleotide metabolism	2	NODE_4_length_15002_cov_5.222723	vOTU_5
+head and packaging	0	NODE_4_length_15002_cov_5.222723	vOTU_5
+integration and excision	0	NODE_4_length_15002_cov_5.222723	vOTU_5
+lysis	0	NODE_4_length_15002_cov_5.222723	vOTU_5
+moron, auxiliary metabolic gene and host takeover	0	NODE_4_length_15002_cov_5.222723	vOTU_5
+other	0	NODE_4_length_15002_cov_5.222723	vOTU_5
+tail	0	NODE_4_length_15002_cov_5.222723	vOTU_5
+transcription regulation	0	NODE_4_length_15002_cov_5.222723	vOTU_5
+unknown function	28	NODE_4_length_15002_cov_5.222723	vOTU_5
+tRNAs	0	NODE_4_length_15002_cov_5.222723	vOTU_5
+CRISPRs	0	NODE_4_length_15002_cov_5.222723	vOTU_5
+tmRNAs	0	NODE_4_length_15002_cov_5.222723	vOTU_5
+VFDB_Virulence_Factors	0	NODE_4_length_15002_cov_5.222723	vOTU_5
+CARD_AMR_Genes	0	NODE_4_length_15002_cov_5.222723	vOTU_5
+CDS	18	NODE_7_length_14674_cov_8.407988	vOTU_8
+connector	0	NODE_7_length_14674_cov_8.407988	vOTU_8
+DNA, RNA and nucleotide metabolism	0	NODE_7_length_14674_cov_8.407988	vOTU_8
+head and packaging	0	NODE_7_length_14674_cov_8.407988	vOTU_8
+integration and excision	0	NODE_7_length_14674_cov_8.407988	vOTU_8
+lysis	0	NODE_7_length_14674_cov_8.407988	vOTU_8
+moron, auxiliary metabolic gene and host takeover	0	NODE_7_length_14674_cov_8.407988	vOTU_8
+other	1	NODE_7_length_14674_cov_8.407988	vOTU_8
+tail	1	NODE_7_length_14674_cov_8.407988	vOTU_8
+transcription regulation	0	NODE_7_length_14674_cov_8.407988	vOTU_8
+unknown function	16	NODE_7_length_14674_cov_8.407988	vOTU_8
+tRNAs	0	NODE_7_length_14674_cov_8.407988	vOTU_8
+CRISPRs	0	NODE_7_length_14674_cov_8.407988	vOTU_8
+tmRNAs	0	NODE_7_length_14674_cov_8.407988	vOTU_8
+VFDB_Virulence_Factors	0	NODE_7_length_14674_cov_8.407988	vOTU_8
+CARD_AMR_Genes	0	NODE_7_length_14674_cov_8.407988	vOTU_8
+CDS	22	NODE_12_length_9335_cov_5.195374	vOTU_11
+connector	0	NODE_12_length_9335_cov_5.195374	vOTU_11
+DNA, RNA and nucleotide metabolism	1	NODE_12_length_9335_cov_5.195374	vOTU_11
+head and packaging	0	NODE_12_length_9335_cov_5.195374	vOTU_11
+integration and excision	0	NODE_12_length_9335_cov_5.195374	vOTU_11
+lysis	0	NODE_12_length_9335_cov_5.195374	vOTU_11
+moron, auxiliary metabolic gene and host takeover	1	NODE_12_length_9335_cov_5.195374	vOTU_11
+other	1	NODE_12_length_9335_cov_5.195374	vOTU_11
+tail	0	NODE_12_length_9335_cov_5.195374	vOTU_11
+transcription regulation	0	NODE_12_length_9335_cov_5.195374	vOTU_11
+unknown function	19	NODE_12_length_9335_cov_5.195374	vOTU_11
+tRNAs	0	NODE_12_length_9335_cov_5.195374	vOTU_11
+CRISPRs	0	NODE_12_length_9335_cov_5.195374	vOTU_11
+tmRNAs	0	NODE_12_length_9335_cov_5.195374	vOTU_11
+VFDB_Virulence_Factors	0	NODE_12_length_9335_cov_5.195374	vOTU_11
+CARD_AMR_Genes	0	NODE_12_length_9335_cov_5.195374	vOTU_11
+CDS	7	NODE_366_length_3543_cov_0.854801	vOTU_20
+connector	1	NODE_366_length_3543_cov_0.854801	vOTU_20
+DNA, RNA and nucleotide metabolism	0	NODE_366_length_3543_cov_0.854801	vOTU_20
+head and packaging	1	NODE_366_length_3543_cov_0.854801	vOTU_20
+integration and excision	0	NODE_366_length_3543_cov_0.854801	vOTU_20
+lysis	0	NODE_366_length_3543_cov_0.854801	vOTU_20
+moron, auxiliary metabolic gene and host takeover	0	NODE_366_length_3543_cov_0.854801	vOTU_20
+other	0	NODE_366_length_3543_cov_0.854801	vOTU_20
+tail	1	NODE_366_length_3543_cov_0.854801	vOTU_20
+transcription regulation	0	NODE_366_length_3543_cov_0.854801	vOTU_20
+unknown function	4	NODE_366_length_3543_cov_0.854801	vOTU_20
+tRNAs	0	NODE_366_length_3543_cov_0.854801	vOTU_20
+CRISPRs	0	NODE_366_length_3543_cov_0.854801	vOTU_20
+tmRNAs	0	NODE_366_length_3543_cov_0.854801	vOTU_20
+VFDB_Virulence_Factors	0	NODE_366_length_3543_cov_0.854801	vOTU_20
+CARD_AMR_Genes	0	NODE_366_length_3543_cov_0.854801	vOTU_20
+CDS	6	NODE_428_length_3109_cov_1.519450	vOTU_22
+connector	0	NODE_428_length_3109_cov_1.519450	vOTU_22
+DNA, RNA and nucleotide metabolism	0	NODE_428_length_3109_cov_1.519450	vOTU_22
+head and packaging	2	NODE_428_length_3109_cov_1.519450	vOTU_22
+integration and excision	0	NODE_428_length_3109_cov_1.519450	vOTU_22
+lysis	1	NODE_428_length_3109_cov_1.519450	vOTU_22
+moron, auxiliary metabolic gene and host takeover	0	NODE_428_length_3109_cov_1.519450	vOTU_22
+other	0	NODE_428_length_3109_cov_1.519450	vOTU_22
+tail	0	NODE_428_length_3109_cov_1.519450	vOTU_22
+transcription regulation	0	NODE_428_length_3109_cov_1.519450	vOTU_22
+unknown function	3	NODE_428_length_3109_cov_1.519450	vOTU_22
+tRNAs	0	NODE_428_length_3109_cov_1.519450	vOTU_22
+CRISPRs	0	NODE_428_length_3109_cov_1.519450	vOTU_22
+tmRNAs	0	NODE_428_length_3109_cov_1.519450	vOTU_22
+VFDB_Virulence_Factors	0	NODE_428_length_3109_cov_1.519450	vOTU_22
+CARD_AMR_Genes	0	NODE_428_length_3109_cov_1.519450	vOTU_22
+CDS	9	NODE_26_length_5425_cov_1.197433	vOTU_15
+connector	0	NODE_26_length_5425_cov_1.197433	vOTU_15
+DNA, RNA and nucleotide metabolism	0	NODE_26_length_5425_cov_1.197433	vOTU_15
+head and packaging	0	NODE_26_length_5425_cov_1.197433	vOTU_15
+integration and excision	0	NODE_26_length_5425_cov_1.197433	vOTU_15
+lysis	0	NODE_26_length_5425_cov_1.197433	vOTU_15
+moron, auxiliary metabolic gene and host takeover	0	NODE_26_length_5425_cov_1.197433	vOTU_15
+other	0	NODE_26_length_5425_cov_1.197433	vOTU_15
+tail	6	NODE_26_length_5425_cov_1.197433	vOTU_15
+transcription regulation	0	NODE_26_length_5425_cov_1.197433	vOTU_15
+unknown function	3	NODE_26_length_5425_cov_1.197433	vOTU_15
+tRNAs	0	NODE_26_length_5425_cov_1.197433	vOTU_15
+CRISPRs	0	NODE_26_length_5425_cov_1.197433	vOTU_15
+tmRNAs	0	NODE_26_length_5425_cov_1.197433	vOTU_15
+VFDB_Virulence_Factors	0	NODE_26_length_5425_cov_1.197433	vOTU_15
+CARD_AMR_Genes	0	NODE_26_length_5425_cov_1.197433	vOTU_15
+CDS	37	NODE_1_length_22303_cov_5.749775	vOTU_2
+connector	3	NODE_1_length_22303_cov_5.749775	vOTU_2
+DNA, RNA and nucleotide metabolism	0	NODE_1_length_22303_cov_5.749775	vOTU_2
+head and packaging	4	NODE_1_length_22303_cov_5.749775	vOTU_2
+integration and excision	0	NODE_1_length_22303_cov_5.749775	vOTU_2
+lysis	1	NODE_1_length_22303_cov_5.749775	vOTU_2
+moron, auxiliary metabolic gene and host takeover	0	NODE_1_length_22303_cov_5.749775	vOTU_2
+other	2	NODE_1_length_22303_cov_5.749775	vOTU_2
+tail	11	NODE_1_length_22303_cov_5.749775	vOTU_2
+transcription regulation	1	NODE_1_length_22303_cov_5.749775	vOTU_2
+unknown function	15	NODE_1_length_22303_cov_5.749775	vOTU_2
+tRNAs	0	NODE_1_length_22303_cov_5.749775	vOTU_2
+CRISPRs	0	NODE_1_length_22303_cov_5.749775	vOTU_2
+tmRNAs	0	NODE_1_length_22303_cov_5.749775	vOTU_2
+VFDB_Virulence_Factors	0	NODE_1_length_22303_cov_5.749775	vOTU_2
+CARD_AMR_Genes	0	NODE_1_length_22303_cov_5.749775	vOTU_2
+CDS	5	NODE_365_length_3544_cov_1.030729	vOTU_19
+connector	0	NODE_365_length_3544_cov_1.030729	vOTU_19
+DNA, RNA and nucleotide metabolism	0	NODE_365_length_3544_cov_1.030729	vOTU_19
+head and packaging	2	NODE_365_length_3544_cov_1.030729	vOTU_19
+integration and excision	0	NODE_365_length_3544_cov_1.030729	vOTU_19
+lysis	0	NODE_365_length_3544_cov_1.030729	vOTU_19
+moron, auxiliary metabolic gene and host takeover	0	NODE_365_length_3544_cov_1.030729	vOTU_19
+other	0	NODE_365_length_3544_cov_1.030729	vOTU_19
+tail	0	NODE_365_length_3544_cov_1.030729	vOTU_19
+transcription regulation	1	NODE_365_length_3544_cov_1.030729	vOTU_19
+unknown function	2	NODE_365_length_3544_cov_1.030729	vOTU_19
+tRNAs	0	NODE_365_length_3544_cov_1.030729	vOTU_19
+CRISPRs	0	NODE_365_length_3544_cov_1.030729	vOTU_19
+tmRNAs	0	NODE_365_length_3544_cov_1.030729	vOTU_19
+VFDB_Virulence_Factors	0	NODE_365_length_3544_cov_1.030729	vOTU_19
+CARD_AMR_Genes	0	NODE_365_length_3544_cov_1.030729	vOTU_19
+CDS	6	NODE_40_length_4284_cov_1.652634	vOTU_16
+connector	0	NODE_40_length_4284_cov_1.652634	vOTU_16
+DNA, RNA and nucleotide metabolism	0	NODE_40_length_4284_cov_1.652634	vOTU_16
+head and packaging	0	NODE_40_length_4284_cov_1.652634	vOTU_16
+integration and excision	0	NODE_40_length_4284_cov_1.652634	vOTU_16
+lysis	0	NODE_40_length_4284_cov_1.652634	vOTU_16
+moron, auxiliary metabolic gene and host takeover	0	NODE_40_length_4284_cov_1.652634	vOTU_16
+other	0	NODE_40_length_4284_cov_1.652634	vOTU_16
+tail	6	NODE_40_length_4284_cov_1.652634	vOTU_16
+transcription regulation	0	NODE_40_length_4284_cov_1.652634	vOTU_16
+unknown function	0	NODE_40_length_4284_cov_1.652634	vOTU_16
+tRNAs	0	NODE_40_length_4284_cov_1.652634	vOTU_16
+CRISPRs	0	NODE_40_length_4284_cov_1.652634	vOTU_16
+tmRNAs	0	NODE_40_length_4284_cov_1.652634	vOTU_16
+VFDB_Virulence_Factors	0	NODE_40_length_4284_cov_1.652634	vOTU_16
+CARD_AMR_Genes	0	NODE_40_length_4284_cov_1.652634	vOTU_16
+CDS	4	NODE_149_length_5615_cov_7.948069	vOTU_18
+connector	0	NODE_149_length_5615_cov_7.948069	vOTU_18
+DNA, RNA and nucleotide metabolism	0	NODE_149_length_5615_cov_7.948069	vOTU_18
+head and packaging	0	NODE_149_length_5615_cov_7.948069	vOTU_18
+integration and excision	0	NODE_149_length_5615_cov_7.948069	vOTU_18
+lysis	0	NODE_149_length_5615_cov_7.948069	vOTU_18
+moron, auxiliary metabolic gene and host takeover	1	NODE_149_length_5615_cov_7.948069	vOTU_18
+other	0	NODE_149_length_5615_cov_7.948069	vOTU_18
+tail	0	NODE_149_length_5615_cov_7.948069	vOTU_18
+transcription regulation	0	NODE_149_length_5615_cov_7.948069	vOTU_18
+unknown function	3	NODE_149_length_5615_cov_7.948069	vOTU_18
+tRNAs	0	NODE_149_length_5615_cov_7.948069	vOTU_18
+CRISPRs	0	NODE_149_length_5615_cov_7.948069	vOTU_18
+tmRNAs	0	NODE_149_length_5615_cov_7.948069	vOTU_18
+VFDB_Virulence_Factors	0	NODE_149_length_5615_cov_7.948069	vOTU_18
+CARD_AMR_Genes	0	NODE_149_length_5615_cov_7.948069	vOTU_18
+CDS	29	NODE_11_length_10953_cov_1.387770	vOTU_9
+connector	0	NODE_11_length_10953_cov_1.387770	vOTU_9
+DNA, RNA and nucleotide metabolism	2	NODE_11_length_10953_cov_1.387770	vOTU_9
+head and packaging	2	NODE_11_length_10953_cov_1.387770	vOTU_9
+integration and excision	1	NODE_11_length_10953_cov_1.387770	vOTU_9
+lysis	0	NODE_11_length_10953_cov_1.387770	vOTU_9
+moron, auxiliary metabolic gene and host takeover	0	NODE_11_length_10953_cov_1.387770	vOTU_9
+other	1	NODE_11_length_10953_cov_1.387770	vOTU_9
+tail	0	NODE_11_length_10953_cov_1.387770	vOTU_9
+transcription regulation	4	NODE_11_length_10953_cov_1.387770	vOTU_9
+unknown function	19	NODE_11_length_10953_cov_1.387770	vOTU_9
+tRNAs	0	NODE_11_length_10953_cov_1.387770	vOTU_9
+CRISPRs	0	NODE_11_length_10953_cov_1.387770	vOTU_9
+tmRNAs	0	NODE_11_length_10953_cov_1.387770	vOTU_9
+VFDB_Virulence_Factors	0	NODE_11_length_10953_cov_1.387770	vOTU_9
+CARD_AMR_Genes	0	NODE_11_length_10953_cov_1.387770	vOTU_9
+CDS	4	NODE_368_length_3510_cov_2.866391	vOTU_21
+connector	0	NODE_368_length_3510_cov_2.866391	vOTU_21
+DNA, RNA and nucleotide metabolism	1	NODE_368_length_3510_cov_2.866391	vOTU_21
+head and packaging	0	NODE_368_length_3510_cov_2.866391	vOTU_21
+integration and excision	1	NODE_368_length_3510_cov_2.866391	vOTU_21
+lysis	0	NODE_368_length_3510_cov_2.866391	vOTU_21
+moron, auxiliary metabolic gene and host takeover	0	NODE_368_length_3510_cov_2.866391	vOTU_21
+other	0	NODE_368_length_3510_cov_2.866391	vOTU_21
+tail	0	NODE_368_length_3510_cov_2.866391	vOTU_21
+transcription regulation	1	NODE_368_length_3510_cov_2.866391	vOTU_21
+unknown function	1	NODE_368_length_3510_cov_2.866391	vOTU_21
+tRNAs	0	NODE_368_length_3510_cov_2.866391	vOTU_21
+CRISPRs	0	NODE_368_length_3510_cov_2.866391	vOTU_21
+tmRNAs	0	NODE_368_length_3510_cov_2.866391	vOTU_21
+VFDB_Virulence_Factors	0	NODE_368_length_3510_cov_2.866391	vOTU_21
+CARD_AMR_Genes	0	NODE_368_length_3510_cov_2.866391	vOTU_21
+CDS	16	NODE_14_length_7965_cov_4.991452	vOTU_12
+connector	0	NODE_14_length_7965_cov_4.991452	vOTU_12
+DNA, RNA and nucleotide metabolism	1	NODE_14_length_7965_cov_4.991452	vOTU_12
+head and packaging	0	NODE_14_length_7965_cov_4.991452	vOTU_12
+integration and excision	0	NODE_14_length_7965_cov_4.991452	vOTU_12
+lysis	0	NODE_14_length_7965_cov_4.991452	vOTU_12
+moron, auxiliary metabolic gene and host takeover	0	NODE_14_length_7965_cov_4.991452	vOTU_12
+other	0	NODE_14_length_7965_cov_4.991452	vOTU_12
+tail	0	NODE_14_length_7965_cov_4.991452	vOTU_12
+transcription regulation	0	NODE_14_length_7965_cov_4.991452	vOTU_12
+unknown function	15	NODE_14_length_7965_cov_4.991452	vOTU_12
+tRNAs	0	NODE_14_length_7965_cov_4.991452	vOTU_12
+CRISPRs	0	NODE_14_length_7965_cov_4.991452	vOTU_12
+tmRNAs	0	NODE_14_length_7965_cov_4.991452	vOTU_12
+VFDB_Virulence_Factors	0	NODE_14_length_7965_cov_4.991452	vOTU_12
+CARD_AMR_Genes	0	NODE_14_length_7965_cov_4.991452	vOTU_12
+CDS	7	NODE_11_length_3137_cov_2.450498	vOTU_10
+connector	0	NODE_11_length_3137_cov_2.450498	vOTU_10
+DNA, RNA and nucleotide metabolism	0	NODE_11_length_3137_cov_2.450498	vOTU_10
+head and packaging	0	NODE_11_length_3137_cov_2.450498	vOTU_10
+integration and excision	1	NODE_11_length_3137_cov_2.450498	vOTU_10
+lysis	0	NODE_11_length_3137_cov_2.450498	vOTU_10
+moron, auxiliary metabolic gene and host takeover	1	NODE_11_length_3137_cov_2.450498	vOTU_10
+other	0	NODE_11_length_3137_cov_2.450498	vOTU_10
+tail	0	NODE_11_length_3137_cov_2.450498	vOTU_10
+transcription regulation	1	NODE_11_length_3137_cov_2.450498	vOTU_10
+unknown function	4	NODE_11_length_3137_cov_2.450498	vOTU_10
+tRNAs	1	NODE_11_length_3137_cov_2.450498	vOTU_10
+CRISPRs	0	NODE_11_length_3137_cov_2.450498	vOTU_10
+tmRNAs	0	NODE_11_length_3137_cov_2.450498	vOTU_10
+VFDB_Virulence_Factors	0	NODE_11_length_3137_cov_2.450498	vOTU_10
+CARD_AMR_Genes	0	NODE_11_length_3137_cov_2.450498	vOTU_10

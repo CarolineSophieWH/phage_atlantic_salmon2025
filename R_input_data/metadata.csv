@@ -1,0 +1,43 @@
+﻿Sample_ID,Sample_name,Original_sample_ID,Sample_or_control,Sample_type,Library_method,Life_condition,Health_phenotype,Weight_g,Length_cm,Kfactor,Location,Bacterial_profile
+NXT065-CP-H01-MDA,H01,104,True Sample,Gut content,MDA,Farmed,Healthy,224,25,1.43,RAS,Aliivibrio sp.
+NXT065-CP-H02-MDA,H02,304,True Sample,Gut content,MDA,Farmed,Healthy,285,25,1.82,RAS,Mycoplasma sp.
+NXT065-CP-H03-MDA,H03,310,True Sample,Gut content,MDA,Farmed,Healthy,199,26,1.135,RAS,Mycoplasma sp.
+NXT065-CP-H05-MDA,H05,501,True Sample,Gut content,MDA,Farmed,Healthy,183,24,1.322,RAS,Mycoplasma sp.
+NXT065-CP-H06-MDA,H06,504,True Sample,Gut content,MDA,Farmed,Healthy,208,25,1.334,RAS,Mycoplasma sp.
+NXT065-CP-H07-MDA,H07,604,True Sample,Gut content,MDA,Farmed,Healthy,197,25,1.262,RAS,Mycoplasma sp.
+NXT065-CP-H08-MDA,H08,702,True Sample,Gut content,MDA,Farmed,Healthy,231,26,1.313,RAS,Mycoplasma sp.
+NXT065-CP-H09-MDA,H09,808,True Sample,Gut content,MDA,Farmed,Healthy,177,24,1.283,RAS,Mycoplasma sp.
+NXT065-CP-H10-MDA,H10,809,True Sample,Gut content,MDA,Farmed,Healthy,224,27,1.14,RAS,Aliivibrio sp.
+NXT065-CP-H11-MDA,H11,810,True Sample,Gut content,MDA,Farmed,Healthy,198,25,1.266,RAS,Aliivibrio sp.
+NXT065-CP-H12-MDA,H12,903,True Sample,Gut content,MDA,Farmed,Healthy,215,26,1.226,RAS,Mycoplasma sp.
+NXT065-CP-H13-MDA,H13,908,True Sample,Gut content,MDA,Farmed,Healthy,195,25,1.245,RAS,Mycoplasma sp.
+NXT065-CP-H14-MDA,H14,910,True Sample,Gut content,MDA,Farmed,Healthy,208,25,1.33,RAS,Mycoplasma sp.
+NXT065-CP-H15-MDA,H15,1001,True Sample,Gut content,MDA,Farmed,Healthy,245,27,1.245,RAS,Mycoplasma sp.
+NXT065-CP-H16-MDA,H16,1003,True Sample,Gut content,MDA,Farmed,Healthy,183,25,1.171,RAS,Mycoplasma sp.
+NXT065-CP-H17-MDA,H17,1008,True Sample,Gut content,MDA,Farmed,Healthy,200,25,1.277,RAS,Mycoplasma sp.
+NXT065-CP-H18-MDA,H18,1101,True Sample,Gut content,MDA,Farmed,Healthy,205,25,1.312,RAS,Mycoplasma sp.
+NXT065-CP-H19-MDA,H19,1102,True Sample,Gut content,MDA,Farmed,Healthy,239,26,1.361,RAS,Mycoplasma sp.
+NXT065-CP-H20-MDA,H20,1110,True Sample,Gut content,MDA,Farmed,Healthy,211,26,1.202,RAS,Mycoplasma sp.
+NXT065-CP-S01-MDA,S01,102,True Sample,Gut content,MDA,Farmed,Sick,147,25,0.938,RAS,"Sick fish, no 16S"
+NXT065-CP-S03-MDA,S03,203,True Sample,Gut content,MDA,Farmed,Sick,153,24,1.105,RAS,"Sick fish, no 16S"
+NXT065-CP-S04-MDA,S04,502,True Sample,Gut content,MDA,Farmed,Sick,180,25,1.152,RAS,"Sick fish, no 16S"
+NXT065-CP-S05-MDA,S05,505,True Sample,Gut content,MDA,Farmed,Sick,223,26,1.271,RAS,Aliivibrio sp.
+NXT065-CP-S06-MDA,S06,507,True Sample,Gut content,MDA,Farmed,Sick,224,26,1.276,RAS,Aliivibrio sp.
+NXT065-CP-S07-MDA,S07,509,True Sample,Gut content,MDA,Farmed,Sick,197,26,1.122,RAS,Aliivibrio sp.
+NXT065-CP-S08-MDA,S08,602,True Sample,Gut content,MDA,Farmed,Sick,172,24,1.244,RAS,"Sick fish, no 16S"
+NXT065-CP-S09-MDA,S09,608,True Sample,Gut content,MDA,Farmed,Sick,204,26,1.161,RAS,Mycoplasma sp.
+NXT065-CP-S10-MDA,S10,609,True Sample,Gut content,MDA,Farmed,Sick,220,26,1.251,RAS,Mycoplasma sp.
+NXT065-CP-S11-MDA,S11,703,True Sample,Gut content,MDA,Farmed,Sick,211,26,1.199,RAS,Mycoplasma sp.
+NXT065-CP-S12-MDA,S12,706,True Sample,Gut content,MDA,Farmed,Sick,224,26,1.274,RAS,Mycoplasma sp.
+NXT065-CP-S13-MDA,S13,710,True Sample,Gut content,MDA,Farmed,Sick,190,25,1.219,RAS,Mycoplasma sp.
+NXT065-CP-S14-MDA,S14,803,True Sample,Gut content,MDA,Farmed,Sick,196,26,1.117,RAS,Aliivibrio sp.
+NXT065-CP-S15-MDA,S15,806,True Sample,Gut content,MDA,Farmed,Sick,158,24,1.141,RAS,Aliivibrio sp.
+NXT065-CP-S16-MDA,S16,1004,True Sample,Gut content,MDA,Farmed,Sick,211,26,1.203,RAS,"Sick fish, no 16S"
+NXT065-CP-S17-MDA,S17,1005,True Sample,Gut content,MDA,Farmed,Sick,190,24,1.372,RAS,"Sick fish, no 16S"
+NXT065-CP-S18-MDA,S18,1010,True Sample,Gut content,MDA,Farmed,Sick,214,27,1.089,RAS,Aliivibrio sp.
+NXT065-CP-S19-MDA,S19,1104,True Sample,Gut content,MDA,Farmed,Sick,216,26,1.228,RAS,Mycoplasma sp.
+NXT065-CP-S20-MDA,S20,1106,True Sample,Gut content,MDA,Farmed,Sick,182,25,1.167,RAS,"Sick fish, no 16S"
+NXT065-CP-NCT2-MDA,Negative_control2,CTRL2,Control Sample,Negative control,MDA,Negative control,,,,,,
+NXT065-CP-NCT1-MDA,Negative_control1,CTRL1,Control Sample,Negative control,MDA,Negative control,,,,,,
+NXT065-CP-MDACT-MDA,Positive_control_MDA,MDA DNA ctrl,Control Sample,Negative control,MDA,Negative control,,,,,,
+NXT065-CP-NCT3-MDA,Negative_control3,CTRL3,Control Sample,Negative control,MDA,Negative control,,,,,,
