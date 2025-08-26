@@ -10,5 +10,5 @@ Virus-like particles (VLP)-metagenomes were retrieved from distal gut content sa
 # Summary: 
 Viral communities were identified and profilled across samples, which with 16S rRNA amplicon data, were grouped based on their dominant bacteria. 
 
-# 16S rRNA gene analysis and data of the system - see DOI: https://doi.org/10.1186/s42523-021-00096-2
-The 16S rRNA data from the same samples, was generated and is publically available by Bozzi et al 2020 (https://github.com/DavideBozzi/Bozzi_et_al_2020_analysis) 
+# 16S rRNA gene data
+The 16S rRNA data from the same samples, was generated and analysed and is publically available by Bozzi et al 2020 (https://github.com/DavideBozzi/Bozzi_et_al_2020_analysis), for publication of the system and its relation to the fish disease state and bacterial community see DOI: https://doi.org/10.1186/s42523-021-00096-2
