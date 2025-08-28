@@ -1,4 +1,4 @@
-# Ecological strategies of bacteria shape inherent phage diversity in Atlantic salmon gut
+# Ecological strategies of bacteria shape inherent phage diversity in Atlantic salmon gut microbiomes
 This github repository includes the code and analytical framework to generate the results and dataset that are reported by Winther-Have et al. 2025 (unpublished).
 Here we provide three code files: 1) Entire pipeline for the viral community analysis from raw .fq.gz files to the final vOTU table. 2) Generation of metagenome assembled genomes (MAGs) using Anvi'o pipeline v8. 3) R script for the statistics and visualisation of the 16S rRNA amplicaon data and vOTUs. All files needed for input to run the R script are provided in the R_input_data folder.
 
