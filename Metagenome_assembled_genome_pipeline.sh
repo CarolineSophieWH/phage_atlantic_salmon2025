@@ -61,8 +61,8 @@ anvi-setup-kegg-data
 anvi-run-kegg-kofams -c contigs2_cf.db -T 4
 
 # Refine MAGs
-anvi-refine -c contigs2_cf.db -p profile2_cf.db -C Jacob -b Bin_1 --server-only
-anvi-rename-bins -c contigs2_cf.db -p profile2_cf.db --prefix CF --collection-to-read Jacob --collection-to-write Refined_MAGs --report-file report_Refined_MAGs_CF.txt --call-MAGs --min-completion-for-MAG 50
+anvi-refine -c contigs2_cf.db -p profile2_cf.db -C cf_col -b Bin_1 --server-only
+anvi-rename-bins -c contigs2_cf.db -p profile2_cf.db --prefix CF --collection-to-read cf_col --collection-to-write Refined_MAGs --report-file report_Refined_MAGs_CF.txt --call-MAGs --min-completion-for-MAG 50
 anvi-summarize -c contigs2_cf.db -p profile2_cf.db -C Refined_MAGs -o Anvio_summary
 
 # Pangenome
