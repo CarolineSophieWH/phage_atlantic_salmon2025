@@ -1,6 +1,6 @@
 ## Deriving differences between treatments 
 
-setwd("~/Work/Caroline")
+setwd("/path/")
 ## Read metadata information for the samples
 metadata = read.csv("metadata.csv", header=T, as.is=T)
 ## Read OTU and viral OTU tables
@@ -28,9 +28,11 @@ d = merge(d, votu, by="Sample_name")
 ## Two things to also consider is whether to dichotomize OTUs and vOTUs
 
 ## Load the libraries needed
+#BiocManager::install("rethinking")
 library("rethinking")
-if(!require("tidyverse")) install.packages("tidyverse")
+library("tidyverse")
 library("dagitty")
+library("svglite")
 
 dag1 <- dagitty("dag{ Phage <- Health -> BacterialProfile -> Phage }")
 impliedConditionalIndependencies(dag1)
@@ -107,23 +109,32 @@ p_post <- cbind(inv_logit( post$a + post$b + post$c),
            inv_logit( post$a + post$c ), 
            inv_logit(post$a))
 
+
+svglite("fig_S5.svg", width = 12.5, height = 8)
+
 ## Plot the posterior densities of having a viral otu based on health status 
 ## and bacterial profile. 
 plot(density(p_post[,1]), xlim=c(0,1), ylim=c(0,5), 
-     xlab="Presence of viral OTUs", main="Posterior density", col="forestgreen",
-     lwd=3)
-lines(density(p_post[,2]), col="forestgreen", lwd=3, lty=2)
-lines(density(p_post[,3]), col="dodgerblue3", lwd=3)
-lines(density(p_post[,4]), col="dodgerblue3", lwd=3, lty=2)
-legend("topright", legend = c("Aliivibrio sp.", "Mycoplasma sp."), 
-       title="Bacterial Profile", title.font = 2, 
-       col=c("forestgreen", "dodgerblue3"), lwd=3, bty="n")
+     xlab="Viral OTUs", col="goldenrod1", main=" ",
+     lwd=3, las=1)
+lines(density(p_post[,2]), col="goldenrod1", lwd=3, lty=2)
+lines(density(p_post[,3]), col="salmon2", lwd=3)
+lines(density(p_post[,4]), col="salmon2", lwd=3, lty=2)
+legend(
+  "topright",
+  legend = c(expression(italic(Aliivibrio)~sp.), expression(italic(Mycoplasma)~sp.)),
+  col = c("goldenrod1", "salmon2"),
+  lwd = 2,
+  bty = "n"
+)
+
+dev.off()
 
 legend(x=0.8, y=4, legend = c("Healthy", "Sick"), 
        title="Phenotype", title.font = 2, 
        col=c("black"), lwd=3, lty=c(1,2), bty="n")
 
-
+fig_S5
 
 
 plot(precis(m2.hasVOTU))
@@ -217,12 +228,18 @@ counts <- cbind(exp(post$a[,1]), exp(post$a[,2]))
 mean((counts[,1] - counts[,2]))
 ## [1] -8.5312
 
+svglite("fig_S6.svg", width = 12.5, height = 8)
+
 ## plot the posterior density 
-plot(density(exp(post$a[,2])), xlim=c(0,22), ylim=c(0,0.5), col="forestgreen", 
-     lwd=2, xlab="Number of viral OTUs", main="Posterior density")
-lines(density(exp(post$a[,1])), col="dodgerblue3", lwd=2)
-legend("topright", legend=c("Aliivibrio sp.", "Mycoplasma sp."), 
-       col=c("forestgreen", "dodgerblue3"), lwd=2, bty="n")
+plot(density(exp(post$a[,2])), xlim=c(0,22), ylim=c(0,0.5), col="goldenrod1", 
+     lwd=2, xlab="Viral OTUs", main=" ", las=1)
+lines(density(exp(post$a[,1])), col="salmon2", lwd=2)
+legend(
+  "topright",
+  legend = c(expression(italic(Aliivibrio)~sp.), expression(italic(Mycoplasma)~sp.)),
+  col = c("goldenrod1", "salmon2"),
+  lwd = 2,
+  bty = "n"
+)
 
-
-
+dev.off()
