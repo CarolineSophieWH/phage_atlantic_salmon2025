@@ -1,11 +1,13 @@
 # Ecological strategies of bacteria shape inherent phage diversity in Atlantic salmon gut microbiomes
-This github repository includes the code and analytical framework to generate the results and dataset that are reported by Winther-Have et al. 2025 (unpublished).
+This github repository includes the code and analytical framework to generate the results and dataset that are reported by Winther-Have et al. 2025 for ISME.
 Here we provide three code files: 1) Entire pipeline for the viral community analysis from raw .fq.gz files to the final vOTU table. 2) Generation of metagenome assembled genomes (MAGs) using Anvi'o pipeline v8. 3) R script for the statistics and visualisation of the 16S rRNA amplicaon data and vOTUs. All files needed for input to run the R script are provided in the R_input_data folder.
+
+Paper: https://doi.org/10.1093/ismejo/wraf272
 
 # Background: 
 Virus-like particles (VLP)-metagenomes were retrieved from distal gut content samples from a cohort of sick and healthy phenotypes of farmed Atlantic salmon (Salmo salar).
 
-<img width="3238" height="2182" alt="Mirror Graphical abstract (3)" src="https://github.com/user-attachments/assets/537262d5-936d-4541-8cf5-456b3a70d89d" />
+<img width="3238" height="2182" alt="Mirror Graphical abstract (3)" src="https://github.com/user-attachments/assets/83433803-10ae-486b-b36f-bc2ec486c971" />
 
 # Summary: 
 Viral communities were identified and profilled across samples, which with 16S rRNA amplicon data, were grouped based on their dominant bacteria. 
